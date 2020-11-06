@@ -150,6 +150,7 @@ public class ModelManager implements Model {
             assert taskmaster.hasSession(sessionName);
 
             studentRecordPredicate = PREDICATE_SHOW_ALL_STUDENT_RECORDS;
+
             // Update filteredStudentRecords before Session is changed.
             filteredStudentRecords = new FilteredList<>(taskmaster.getSession(sessionName).getStudentRecords());
 
@@ -266,10 +267,6 @@ public class ModelManager implements Model {
         filteredStudents.setPredicate(predicate);
     }
 
-    /**
-     * Returns an unmodifiable view of the list of {@code StudentRecord} backed by the internal list of
-     * {@code versionedTaskmaster}
-     */
     @Override
     public ObservableList<StudentRecord> getFilteredStudentRecordList() {
         if (taskmaster.getSessionList().size() == 0) {
@@ -315,9 +312,8 @@ public class ModelManager implements Model {
     @Override
     public void showLowestScoringStudents() {
         double lowestScore = taskmaster.getLowestScore();
-        studentRecordPredicate = new ScoreEqualsPredicate(lowestScore);
 
-        updateFilteredStudentRecordList(studentRecordPredicate);
+        updateFilteredStudentRecordList(new ScoreEqualsPredicate(lowestScore));
     }
 
     //=========== Current Session Accessor =================================================================

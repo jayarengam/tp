@@ -59,6 +59,7 @@ public class JsonTaskmasterStorage implements TaskmasterStorage {
 
         Optional<JsonSerializableTaskmaster> jsonTaskmaster = JsonUtil.readJsonFile(
                 filePath, JsonSerializableTaskmaster.class);
+
         if (!jsonTaskmaster.isPresent()) {
             return Optional.empty();
         }

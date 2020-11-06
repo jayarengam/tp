@@ -126,7 +126,9 @@ public interface Model {
     /** Returns an unmodifiable view of the filtered student list */
     ObservableList<Student> getFilteredStudentList();
 
-    /** Returns an unmodifiable view of the filtered attendance list */
+    /**
+     * Returns an unmodifiable view of the filtered student record list based on the current Session of the Taskmaster
+     */
     ObservableList<StudentRecord> getFilteredStudentRecordList();
 
     /** Returns an unmodifiable view of the filtered session list */
@@ -138,8 +140,16 @@ public interface Model {
      */
     void updateFilteredStudentList(Predicate<Student> predicate);
 
+    /**
+     * Updates the filter of the filtered session list to filter by the given {@code predicate}.
+     * @throws NullPointerException if {@code predicate} is null.
+     */
     void updateFilteredSessionList(Predicate<Session> predicate);
 
+    /**
+     * Updates the filter of the filtered student record list to filter by the given {@code predicate}.
+     * @throws NullPointerException if {@code predicate} is null.
+     */
     void updateFilteredStudentRecordList(Predicate<StudentRecord> predicate);
 
     /**

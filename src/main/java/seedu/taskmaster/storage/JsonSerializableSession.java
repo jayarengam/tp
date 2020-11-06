@@ -80,13 +80,15 @@ class JsonSerializableSession {
             if (nusnetIds.contains(nusnetId)) {
                 throw new IllegalValueException(MESSAGE_DUPLICATE_STUDENT);
             }
-            nusnetIds.add(modelAttendance.getNusnetId());
+
+            nusnetIds.add(nusnetId);
 
             studentRecords.add(modelAttendance);
         }
 
         StudentRecordList newRecordList = new StudentRecordListManager();
         newRecordList.setStudentRecords(studentRecords);
+
         SessionName newSessionName = new SessionName(sessionName);
 
         try {
