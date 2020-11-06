@@ -57,7 +57,8 @@ public class MarkCommand extends Command {
         } catch (SessionException sessionException) {
             throw new CommandException(sessionException.getMessage());
         }
-        return new CommandResult(String.format(MESSAGE_MARK_STUDENT_SUCCESS, studentRecordToMark, attendanceType));
+        return new CommandResult(String.format(
+                MESSAGE_MARK_STUDENT_SUCCESS, studentRecordToMark.getNusnetId(), attendanceType));
     }
 
     @Override

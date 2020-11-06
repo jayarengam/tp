@@ -11,14 +11,17 @@ import seedu.taskmaster.logic.commands.ChangeSessionCommand;
 import seedu.taskmaster.logic.commands.ClearCommand;
 import seedu.taskmaster.logic.commands.Command;
 import seedu.taskmaster.logic.commands.DeleteCommand;
+import seedu.taskmaster.logic.commands.DeleteSessionCommand;
 import seedu.taskmaster.logic.commands.EditCommand;
 import seedu.taskmaster.logic.commands.ExitCommand;
 import seedu.taskmaster.logic.commands.FindCommand;
 import seedu.taskmaster.logic.commands.HelpCommand;
 import seedu.taskmaster.logic.commands.ListCommand;
+import seedu.taskmaster.logic.commands.LowestScoreCommand;
 import seedu.taskmaster.logic.commands.MarkCommand;
 import seedu.taskmaster.logic.commands.NewSessionCommand;
 import seedu.taskmaster.logic.commands.ParticipationCommand;
+import seedu.taskmaster.logic.commands.RandomStudentCommand;
 import seedu.taskmaster.logic.parser.exceptions.ParseException;
 
 /**
@@ -75,14 +78,23 @@ public class TaskmasterParser {
         case MarkCommand.COMMAND_WORD:
             return new MarkCommandParser().parse(arguments);
 
-        case ChangeSessionCommand.COMMAND_WORD:
-            return new ChangeSessionCommandParser().parse(arguments);
+        case ParticipationCommand.COMMAND_WORD:
+            return new ParticipationCommandParser().parse(arguments);
+
+        case LowestScoreCommand.COMMAND_WORD:
+            return new LowestScoreCommand();
+
+        case RandomStudentCommand.COMMAND_WORD:
+            return new RandomStudentCommand();
 
         case NewSessionCommand.COMMAND_WORD:
             return new NewSessionCommandParser().parse(arguments);
 
-        case ParticipationCommand.COMMAND_WORD:
-            return new ParticipationCommandParser().parse(arguments);
+        case ChangeSessionCommand.COMMAND_WORD:
+            return new ChangeSessionCommandParser().parse(arguments);
+
+        case DeleteSessionCommand.COMMAND_WORD:
+            return new DeleteSessionCommandParser().parse(arguments);
 
         default:
             throw new ParseException(MESSAGE_UNKNOWN_COMMAND);

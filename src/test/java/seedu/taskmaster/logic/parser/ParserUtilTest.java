@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.taskmaster.logic.commands.CommandTestUtil.INVALID_PARTICIPATION_NONINTEGER;
 import static seedu.taskmaster.logic.commands.CommandTestUtil.INVALID_PARTICIPATION_SCORE;
-import static seedu.taskmaster.logic.commands.CommandTestUtil.VALID_SCORE_INT;
+import static seedu.taskmaster.logic.commands.CommandTestUtil.VALID_SCORE_DOUBLE;
 import static seedu.taskmaster.logic.commands.CommandTestUtil.VALID_SCORE_STRING;
 import static seedu.taskmaster.logic.parser.ParserUtil.MESSAGE_INVALID_INDEX;
 import static seedu.taskmaster.testutil.Assert.assertThrows;
@@ -206,7 +206,7 @@ public class ParserUtilTest {
 
     @Test
     void parseScore_validInput() throws Exception {
-        int res = ParserUtil.parseScore(VALID_SCORE_STRING);
-        assertEquals(VALID_SCORE_INT, res);
+        double res = ParserUtil.parseScore(VALID_SCORE_STRING)[0];
+        assertEquals(VALID_SCORE_DOUBLE, res);
     }
 }

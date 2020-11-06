@@ -11,19 +11,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.stage.Stage?>
 
-<fx:root minHeight="400.0" minWidth="600.0" onCloseRequest="#handleExit" title="Taskmaster" type="javafx.stage.Stage"
-         xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root minHeight="400.0" minWidth="600.0" onCloseRequest="#handleExit" title="Taskmaster" type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <icons>
     <Image url="@/images/TAskmaster_icon.png" />
   </icons>
    <scene>
       <Scene stylesheets="@Taskmaster.css">
-          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                      prefHeight="400.0" prefWidth="600.0">
+          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #383838;">
             <children>
-               <MenuBar fx:id="menuBar" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0"
-                        AnchorPane.bottomAnchor="375.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                        AnchorPane.topAnchor="0.0">
+               <MenuBar fx:id="menuBar" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" AnchorPane.bottomAnchor="375.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <menus>
                      <Menu mnemonicParsing="false" text="File">
                         <items>
@@ -37,24 +33,18 @@
                      </Menu>
                   </menus>
                </MenuBar>
-               <StackPane fx:id="commandBoxPlaceholder" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0"
-                          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+               <StackPane fx:id="commandBoxPlaceholder" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
                   <padding>
                      <Insets bottom="5" left="10" right="10" top="5" />
                   </padding>
                </StackPane>
-               <StackPane fx:id="resultDisplayPlaceholder" maxHeight="-Infinity" minHeight="-Infinity"
-                          prefHeight="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                          AnchorPane.topAnchor="65.0">
+               <StackPane fx:id="resultDisplayPlaceholder" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="65.0">
                   <padding>
                      <Insets bottom="5" left="10" right="10" top="5" />
                   </padding>
                </StackPane>
-               <AnchorPane fx:id="sessionListPanelPlaceholder" prefWidth="150.0" styleClass="pane-with-border"
-                           AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="165.0" />
-               <VBox fx:id="viewList" minHeight="-Infinity" prefHeight="220.0" styleClass="pane-with-border"
-                     AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0"
-                     AnchorPane.topAnchor="165.0">
+               <AnchorPane fx:id="sessionListPanelPlaceholder" prefWidth="180.0" styleClass="pane-with-border" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="165.0" />
+               <VBox fx:id="viewList" minHeight="-Infinity" prefHeight="220.0" styleClass="pane-with-border" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="180.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="165.0">
                   <padding>
                      <Insets bottom="10" left="10" right="10" top="10" />
                   </padding>
@@ -62,9 +52,7 @@
                      <StackPane fx:id="viewListPanelPlaceholder" styleClass="pane-with-border" VBox.vgrow="ALWAYS" />
                   </children>
                </VBox>
-               <AnchorPane fx:id="statusbarPlaceholder" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0"
-                           styleClass="pane-with-border" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                           AnchorPane.rightAnchor="0.0" />
+               <AnchorPane fx:id="statusbarPlaceholder" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" styleClass="pane-with-border" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
             </children>
          </AnchorPane>
       </Scene>

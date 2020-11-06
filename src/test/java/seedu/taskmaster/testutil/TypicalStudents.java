@@ -15,8 +15,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import seedu.taskmaster.model.Taskmaster;
+import seedu.taskmaster.model.record.StudentRecord;
 import seedu.taskmaster.model.session.Session;
 import seedu.taskmaster.model.session.SessionDateTime;
 import seedu.taskmaster.model.session.SessionList;
@@ -112,47 +114,90 @@ public class TypicalStudents {
     private TypicalStudents() {} // prevents instantiation
 
     /**
-     * Returns an {@code Taskmaster} with all the typical students and 1 session.
+     * Returns a {@code Session} with all the typical students.
+     */
+    public static Session getTypicalSession() {
+        return new Session(
+                new SessionName("Typical session"),
+                new SessionDateTime(LocalDateTime.of(2020, 1, 1, 12, 0)),
+                getTypicalStudents());
+    }
+
+    /**
+     * Returns a {@code Session} with all the typical students and modified {@code ClassParticipation} scores.
+     */
+    public static Session getTypicalScoredSession() {
+        Session modifiedSession = new Session(
+                new SessionName("Typical session 2"),
+                new SessionDateTime(LocalDateTime.of(2020, 1, 1, 12, 0)),
+                getTypicalStudents());
+        modifiedSession.scoreAllParticipation(
+                getTypicalStudents().stream().map(Student::getNusnetId).collect(Collectors.toList()), 5);
+        modifiedSession.scoreStudentParticipation(ALICE.getNusnetId(), 4);
+        modifiedSession.scoreStudentParticipation(CARL.getNusnetId(), 4);
+
+        return modifiedSession;
+    }
+
+    /**
+     * Returns a {@code Taskmaster} with all the typical students and 1 session.
      */
     public static Taskmaster getTypicalTaskmaster() {
         Taskmaster typicalTaskmaster = new Taskmaster();
         for (Student student : getTypicalStudents()) {
             typicalTaskmaster.addStudent(student);
         }
-        Session typicalSession = new Session(
-                new SessionName("Typical session"),
-                new SessionDateTime(LocalDateTime.of(2020, 1, 1, 12, 0)),
-                getTypicalStudents());
-        typicalTaskmaster.addSession(typicalSession);
-
+        typicalTaskmaster.addSession(getTypicalSession());
         return typicalTaskmaster;
     }
 
     /**
-     * Returns an {@code SessionList} with all the typical students and a SessionList
-     * @return
+     * Returns a {@code Taskmaster} with all the typical students and 2 sessions, one of which is scored.
+     */
+    public static Taskmaster getScoredTaskmaster() {
+        Taskmaster taskmaster = getTypicalTaskmaster();
+        taskmaster.setSessions(getTypicalScoredSessionList().asUnmodifiableObservableList());
+        return taskmaster;
+    }
+
+
+    /**
+     * Returns an {@code SessionList} with all the typical students and two unmodified {@code Sessions}.
      */
     public static SessionList getTypicalSessionList() {
         SessionList sessionList = new SessionListManager();
-
-        Session typicalSession = new Session(
-                new SessionName("Typical session"),
-                new SessionDateTime(LocalDateTime.of(2020, 1, 1, 12, 0)),
-                getTypicalStudents());
-
+        Session typicalSession = getTypicalSession();
         sessionList.add(typicalSession);
-
         Session typicalSession2 = new Session(
                 new SessionName("Typical session 2"),
                 new SessionDateTime(LocalDateTime.of(2020, 1, 1, 13, 0)),
                 getTypicalStudents());
-
         sessionList.add(typicalSession2);
-
         return sessionList;
     }
 
+    /**
+     * Returns an {@code SessionList} with all the typical students and two unmodified {@code Sessions}.
+     */
+    public static SessionList getTypicalScoredSessionList() {
+        SessionList sessionList = new SessionListManager();
+        sessionList.add(getTypicalSession());
+        sessionList.add(getTypicalScoredSession());
+        return sessionList;
+    }
+
+    /**
+     * Returns a List containing all the typical students .
+     */
     public static List<Student> getTypicalStudents() {
         return new ArrayList<>(Arrays.asList(ALICE, BENSON, CARL, DANIEL, ELLE, FIONA, GEORGE));
+    }
+
+    /**
+     * Returns a list containing the StudentRecords of all the typical students,
+     * without modified ClassParticipation and Attendance fields.
+     */
+    public static List<StudentRecord> getTypicalStudentRecords() {
+        return getTypicalSession().getStudentRecords();
     }
 }

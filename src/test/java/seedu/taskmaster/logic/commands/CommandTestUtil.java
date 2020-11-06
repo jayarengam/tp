@@ -7,6 +7,8 @@ import static seedu.taskmaster.logic.parser.CliSyntax.PREFIX_CLASS_PARTICIPATION
 import static seedu.taskmaster.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.taskmaster.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.taskmaster.logic.parser.CliSyntax.PREFIX_NUSNETID;
+import static seedu.taskmaster.logic.parser.CliSyntax.PREFIX_SESSION_DATE_TIME;
+import static seedu.taskmaster.logic.parser.CliSyntax.PREFIX_SESSION_NAME;
 import static seedu.taskmaster.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.taskmaster.logic.parser.CliSyntax.PREFIX_TELEGRAM;
 import static seedu.taskmaster.testutil.Assert.assertThrows;
@@ -38,10 +40,12 @@ public class CommandTestUtil {
     public static final String VALID_NUSNETID_BOB = "e0456789";
     public static final String VALID_TAG_HUSBAND = "husband";
     public static final String VALID_TAG_FRIEND = "friend";
+    public static final String VALID_SESSION_NAME = "Tutorial 1";
+    public static final String VALID_SESSION_DATETIME = "23-10-2020 0900";
     public static final String PRESENT_ATTENDANCE = "present";
     public static final String ABSENT_ATTENDANCE = "absent";
-    public static final String VALID_SCORE_STRING = "0";
-    public static final int VALID_SCORE_INT = 0;
+    public static final String VALID_SCORE_STRING = "0.00";
+    public static final double VALID_SCORE_DOUBLE = 0;
 
     public static final String NAME_DESC_AMY = " " + PREFIX_NAME + VALID_NAME_AMY;
     public static final String NAME_DESC_BOB = " " + PREFIX_NAME + VALID_NAME_BOB;
@@ -55,6 +59,8 @@ public class CommandTestUtil {
     public static final String TAG_DESC_HUSBAND = " " + PREFIX_TAG + VALID_TAG_HUSBAND;
     public static final String ATTENDANCE_DESC_PRESENT = " " + PREFIX_ATTENDANCE_TYPE + PRESENT_ATTENDANCE;
     public static final String ATTENDANCE_DESC_ABSENT = " " + PREFIX_ATTENDANCE_TYPE + ABSENT_ATTENDANCE;
+    public static final String NEW_SESSION_NAME_DESC = " " + PREFIX_SESSION_NAME + VALID_SESSION_NAME;
+    public static final String NEW_SESSION_DATETIME_DESC = " " + PREFIX_SESSION_DATE_TIME + VALID_SESSION_DATETIME;
 
     public static final String INVALID_NAME_DESC = " " + PREFIX_NAME + "James&"; // '&' not allowed in names
     public static final String INVALID_TELEGRAM_DESC = " " + PREFIX_TELEGRAM + "911@"; // '@' not allowed in telegram
@@ -63,7 +69,12 @@ public class CommandTestUtil {
     public static final String INVALID_TAG_DESC = " " + PREFIX_TAG + "hubby*"; // '*' not allowed in tags
     public static final String INVALID_ATTENDANCE_DESC = " " + PREFIX_ATTENDANCE_TYPE + "notAttendanceType";
     public static final String INVALID_PARTICIPATION_SCORE = " " + PREFIX_CLASS_PARTICIPATION + "-1";
+    public static final String INVALID_PARTICIPATION_TOOSMALL = " " + PREFIX_CLASS_PARTICIPATION + "-1";
+    public static final String INVALID_PARTICIPATION_NEGATIVEZERO = " " + PREFIX_CLASS_PARTICIPATION + "-0";
+    public static final String INVALID_PARTICIPATION_TOOBIG = " " + PREFIX_CLASS_PARTICIPATION + "10.1";
     public static final String INVALID_PARTICIPATION_NONINTEGER = " " + PREFIX_CLASS_PARTICIPATION + "NOTASCORE";
+    public static final String INVALID_SESSION_NAME_DESC = " " + PREFIX_SESSION_NAME + "****"; // '*' not allowed
+
     // refer to {@code AttendanceType} for valid attendance types
 
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";

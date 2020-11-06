@@ -19,6 +19,7 @@ import seedu.taskmaster.logic.commands.MarkCommand;
 import seedu.taskmaster.model.record.AttendanceType;
 
 public class MarkCommandParserTest {
+
     private static final String MESSAGE_INVALID_FORMAT =
             String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE);
 

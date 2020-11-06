@@ -69,9 +69,13 @@ public class Student {
             return true;
         }
 
-        return otherStudent != null
-                && otherStudent.getName().equals(getName())
-                && (otherStudent.getTelegram().equals(getTelegram()) || otherStudent.getEmail().equals(getEmail()));
+        if (otherStudent == null) {
+            return false;
+        }
+
+        return otherStudent.getNusnetId().equals(getNusnetId())
+                || (otherStudent.getName().equals(getName())
+                && (otherStudent.getTelegram().equals(getTelegram()) || otherStudent.getEmail().equals(getEmail())));
     }
 
     /**

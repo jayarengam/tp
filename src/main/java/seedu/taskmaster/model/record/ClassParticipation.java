@@ -4,7 +4,7 @@ package seedu.taskmaster.model.record;
 public class ClassParticipation {
     public static final String MESSAGE_CONSTRAINTS = "The score of a student needs to be a positive integer.";
 
-    private int score = 0;
+    private double score = 0;
 
     /**
      * Constructor method for Class Participation
@@ -20,25 +20,22 @@ public class ClassParticipation {
      * Uses the default maximum score, which is 10
      * The score is set to the wanted score
      */
-    public ClassParticipation(int score) {
+    public ClassParticipation(double score) {
         assert score >= 0;
         this.score = score;
     }
 
     /**
-     * Returns the class participation score as an integer.
+     * Returns the class participation score as an double.
      */
-    public int getRawScore() {
+    public double getRawScore() {
         return this.score;
     }
 
     @Override
     public String toString() {
-        return "Class Participation Score: " + score;
-    }
-
-    public String description() {
-        return this.toString();
+        String formattedScore = String.format("%.2f", score);
+        return "Class Participation Score: " + formattedScore;
     }
 
     @Override

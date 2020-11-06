@@ -114,6 +114,7 @@ public class LogicManager implements Logic {
     public void changeSession(SessionName sessionName) {
         model.changeSession(sessionName);
     }
+
     @Override
     public SimpleObjectProperty<Session> getCurrentSession() {
         return this.model.getCurrentSession();

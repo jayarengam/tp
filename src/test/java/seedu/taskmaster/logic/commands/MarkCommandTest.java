@@ -25,36 +25,28 @@ public class MarkCommandTest {
     private Model model = new ModelManager(getTypicalTaskmaster(), new UserPrefs());
 
     @Test
-    public void execute_markPresentWithValidIndex_success() {
+    public void execute_validIndex_success() {
         model.changeSession(new SessionName("Typical session"));
         StudentRecord firstStudentRecord = model
                 .getFilteredStudentRecordList()
                 .get(INDEX_FIRST_STUDENT.getZeroBased());
-
-        Model expectedModel = new ModelManager(getTypicalTaskmaster(), new UserPrefs());
-        expectedModel.changeSession(new SessionName("Typical session"));
-        MarkCommand markCommand = new MarkCommand(INDEX_FIRST_STUDENT, AttendanceType.PRESENT);
-        expectedModel.markStudentRecord(firstStudentRecord, AttendanceType.PRESENT);
-
-        String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_STUDENT_SUCCESS,
-                firstStudentRecord, AttendanceType.PRESENT);
-        assertCommandSuccess(markCommand, model, expectedMessage, expectedModel);
-    }
-
-    @Test
-    public void execute_markAbsentWithValidIndex_success() {
-        model.changeSession(new SessionName("Typical session"));
         StudentRecord secondStudentRecord = model
                 .getFilteredStudentRecordList()
                 .get(INDEX_SECOND_STUDENT.getZeroBased());
 
         Model expectedModel = new ModelManager(getTypicalTaskmaster(), new UserPrefs());
         expectedModel.changeSession(new SessionName("Typical session"));
-        MarkCommand markCommand = new MarkCommand(INDEX_SECOND_STUDENT, AttendanceType.ABSENT);
-        expectedModel.markStudentRecord(secondStudentRecord, AttendanceType.ABSENT);
 
+        MarkCommand markCommand = new MarkCommand(INDEX_FIRST_STUDENT, AttendanceType.PRESENT);
+        expectedModel.markStudentRecord(firstStudentRecord, AttendanceType.PRESENT);
         String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_STUDENT_SUCCESS,
-                secondStudentRecord, AttendanceType.ABSENT);
+                firstStudentRecord.getNusnetId(), AttendanceType.PRESENT);
+        assertCommandSuccess(markCommand, model, expectedMessage, expectedModel);
+
+        markCommand = new MarkCommand(INDEX_SECOND_STUDENT, AttendanceType.ABSENT);
+        expectedModel.markStudentRecord(secondStudentRecord, AttendanceType.ABSENT);
+        expectedMessage = String.format(MarkCommand.MESSAGE_MARK_STUDENT_SUCCESS,
+                secondStudentRecord.getNusnetId(), AttendanceType.ABSENT);
         assertCommandSuccess(markCommand, model, expectedMessage, expectedModel);
     }
 

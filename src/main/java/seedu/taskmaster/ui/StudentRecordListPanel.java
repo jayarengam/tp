@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
@@ -18,14 +19,23 @@ public class StudentRecordListPanel extends UiPart<Region> {
     private final Logger logger = LogsCenter.getLogger(StudentRecordListPanel.class);
 
     @FXML
+    private Label viewName;
+
+    @FXML
+    private Label viewDateTime;
+
+    @FXML
     private ListView<StudentRecord> mainListView;
 
     /**
      * Creates a {@code StudentRecordListPanel} with the given {@code ObservableList}.
      * @param studentRecordList
      */
-    public StudentRecordListPanel(ObservableList<StudentRecord> studentRecordList) {
+    public StudentRecordListPanel(ObservableList<StudentRecord> studentRecordList,
+                                  String sessionName, String sessionDateTime) {
         super(FXML);
+        viewName.setText(sessionName);
+        viewDateTime.setText(sessionDateTime);
         mainListView.setItems(studentRecordList);
         mainListView.setCellFactory(listView -> new StudentRecordListViewCell());
     }

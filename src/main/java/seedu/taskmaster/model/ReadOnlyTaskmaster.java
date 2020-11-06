@@ -25,4 +25,5 @@ public interface ReadOnlyTaskmaster {
      * {@code StudentRecord}.
      */
     ObservableList<StudentRecord> getStudentRecordList();
+
 }

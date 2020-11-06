@@ -9,6 +9,8 @@ public interface SessionList extends Iterable<Session> {
 
     Session get(SessionName sessionName) throws SessionNotFoundException;
 
+    int getNumberOfSessions();
+
     /**
      * Returns true if the session list contains {@code session}.
      */
@@ -18,7 +20,7 @@ public interface SessionList extends Iterable<Session> {
 
     void add(Session toAdd);
 
-    int getNumberOfSessions();
+    void delete(SessionName toDelete);
 
     /**
      * Returns true if there are no sessions in the session list.

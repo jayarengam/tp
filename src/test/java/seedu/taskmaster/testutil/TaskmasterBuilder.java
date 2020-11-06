@@ -1,6 +1,7 @@
 package seedu.taskmaster.testutil;
 
 import seedu.taskmaster.model.Taskmaster;
+import seedu.taskmaster.model.session.Session;
 import seedu.taskmaster.model.student.Student;
 
 /**
@@ -25,6 +26,14 @@ public class TaskmasterBuilder {
      */
     public TaskmasterBuilder withStudent(Student student) {
         taskmaster.addStudent(student);
+        return this;
+    }
+
+    /**
+     * Adds a new {@code Session} to the {@code Taskmaster} that we are building.
+     */
+    public TaskmasterBuilder withSession(Session session) {
+        taskmaster.addSession(session);
         return this;
     }
 

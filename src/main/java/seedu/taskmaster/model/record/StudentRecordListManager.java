@@ -6,6 +6,7 @@ import static seedu.taskmaster.commons.util.CollectionUtil.requireAllNonNull;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import javafx.collections.FXCollections;
@@ -70,7 +71,7 @@ public class StudentRecordListManager implements StudentRecordList {
      * Marks the attendance of students represented by the list of {@code nusnetIds} with {@code attendanceType}.
      */
     @Override
-    public void markAllStudents(List<NusnetId> nusnetIds, AttendanceType attendanceType) {
+    public void markAllStudentAttendances(List<NusnetId> nusnetIds, AttendanceType attendanceType) {
         for (NusnetId nusnetId : nusnetIds) {
             markStudentAttendance(nusnetId, attendanceType);
         }
@@ -81,7 +82,7 @@ public class StudentRecordListManager implements StudentRecordList {
      * Updates participation score of a student represented by their {@code nusnetId} to {@code score}.
      */
     @Override
-    public void scoreStudentParticipation(NusnetId nusnetId, int score) {
+    public void scoreStudentParticipation(NusnetId nusnetId, double score) {
         requireAllNonNull(nusnetId);
 
         boolean isFound = false;
@@ -108,7 +109,7 @@ public class StudentRecordListManager implements StudentRecordList {
      * Updates participation score of all students in the list of {@code nusnetIds} with {@code attendanceType}.
      */
     @Override
-    public void scoreAllParticipation(List<NusnetId> nusnetIds, int score) {
+    public void scoreAllParticipation(List<NusnetId> nusnetIds, double score) {
         for (NusnetId nusnetId : nusnetIds) {
             scoreStudentParticipation(nusnetId, score);
         }
@@ -132,6 +133,24 @@ public class StudentRecordListManager implements StudentRecordList {
         }
 
         internalList.setAll(studentRecords);
+    }
+
+    /**
+     * Returns the lowest score amongst all students in the student list.
+     */
+    @Override
+    public double getLowestScore() {
+        double lowestScore = Integer.MAX_VALUE;
+        for (int i = 0; i < internalList.size(); i++) {
+            StudentRecord studentRecord = internalList.get(i);
+            double score = studentRecord.getClassParticipation().getRawScore();
+
+            if (score < lowestScore) {
+                lowestScore = score;
+            }
+        }
+
+        return lowestScore;
     }
 
     /**
@@ -202,6 +221,17 @@ public class StudentRecordListManager implements StudentRecordList {
             }
         }
         return true;
+    }
+
+    /**
+     * Returns a random Student Record from the Student Record List
+     * @return A random Student Record
+     */
+    @Override
+    public StudentRecord getRandomStudentRecord() {
+        Random random = new Random();
+        int index = random.nextInt(internalList.size());
+        return internalList.get(index);
     }
 
     /**

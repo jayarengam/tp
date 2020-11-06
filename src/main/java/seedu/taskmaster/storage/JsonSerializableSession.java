@@ -55,7 +55,7 @@ class JsonSerializableSession {
      */
     public JsonSerializableSession(Session source) {
         this.sessionName = source.getSessionName().name;
-        this.sessionDateTime = source.getSessionDateTime().displayDateTime();
+        this.sessionDateTime = source.getSessionDateTime().getDateTimeString();
         this.records.addAll(source.getStudentRecords().stream()
                     .map(JsonAdaptedStudentRecord::new)
                     .collect(Collectors.toList()));

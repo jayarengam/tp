@@ -3,6 +3,8 @@ package seedu.taskmaster.ui;
 import java.util.logging.Logger;
 
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
@@ -79,7 +81,16 @@ public class MainWindow extends UiPart<Stage> {
 
         this.currentSession = logic.getCurrentSession();
         // the ui will refill its contents when currentSession updates
-        currentSession.addListener((o, ov, nv) -> fillInnerParts(false));
+        currentSession.addListener(new ChangeListener<Session>() {
+            @Override
+            public void changed(ObservableValue<? extends Session> observable, Session oldValue, Session newValue) {
+                if (newValue == null) {
+                    fillInnerParts(true);
+                } else {
+                    fillInnerParts(false);
+                }
+            }
+        });
     }
 
     public Stage getPrimaryStage() {
@@ -149,7 +160,10 @@ public class MainWindow extends UiPart<Stage> {
         if (bool) {
             mainListPanel = new StudentListPanel(logic.getFilteredStudentList());
         } else {
-            mainListPanel = new StudentRecordListPanel(logic.getFilteredStudentRecordList());
+            String sessionName = currentSession.get().getSessionName().name;
+            String sessionDateTime = currentSession.get().getSessionDateTime().getDisplayDateTimeString();
+            mainListPanel = new StudentRecordListPanel(logic.getFilteredStudentRecordList(),
+                    sessionName, sessionDateTime);
         }
     }
 

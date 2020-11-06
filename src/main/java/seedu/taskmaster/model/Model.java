@@ -18,11 +18,14 @@ import seedu.taskmaster.model.student.Student;
  * The API of the Model component.
  */
 public interface Model {
-    /** {@code Predicate} that always evaluate to true */
+    /** {@code Predicate} that always evaluates to true */
     Predicate<Student> PREDICATE_SHOW_ALL_STUDENTS = unused -> true;
 
-    /** {@code Predicate} that always evaluate to true */
+    /** {@code Predicate} that always evaluates to true */
     Predicate<Session> PREDICATE_SHOW_ALL_SESSIONS = unused -> true;
+
+    /** {@code Predicate} that always evaluates to true */
+    Predicate<StudentRecord> PREDICATE_SHOW_ALL_STUDENT_RECORDS = unused -> true;
 
     /**
      * Replaces user prefs data with the data in {@code userPrefs}.
@@ -69,11 +72,20 @@ public interface Model {
     void setSessions(List<Session> sessions);
 
     /**
+     * Deletes the session with {@code sessionName}.
+     * {@code sessionName} must already exist in the session list.
+     */
+    void deleteSession(SessionName sessionName);
+
+    /**
      * Adds the given session.
      * {@code session} must not already exist in the session list.
      */
     void addSession(Session session);
 
+    /**
+     * Changes the currentSession to a Session with that name.
+     */
     void changeSession(SessionName sessionName);
 
     /**
@@ -128,6 +140,13 @@ public interface Model {
 
     void updateFilteredSessionList(Predicate<Session> predicate);
 
+    void updateFilteredStudentRecordList(Predicate<StudentRecord> predicate);
+
+    /**
+     * Updates the filter of the filtered student list to show the students with the lowest score.
+     */
+    void showLowestScoringStudents();
+
     /**
      * Marks the attendance of the given student record {@code target} with the given {@code attendanceType}.
      * The student must exist in the student list.
@@ -137,27 +156,32 @@ public interface Model {
     void markStudentWithNusnetId(NusnetId nusnetId, AttendanceType attendanceType);
 
     /**
-     * Marks the attendances of all {@code students} with the given {@code attendanceType}
+     * Marks the attendances of all {@code studentRecords} with the given {@code attendanceType}
      */
-    void markAllStudents(List<Student> students, AttendanceType attendanceType);
+    void markAllStudentRecords(List<StudentRecord> studentRecords, AttendanceType attendanceType);
 
     /**
      * Marks the attendance of the given student {@code target} with the given {@code attendanceType}.
      * The student must exist in the student list.
      */
-    void scoreStudent(Student target, int score);
+    void scoreStudent(StudentRecord target, double score);
 
-    void scoreStudentWithNusnetId(NusnetId nusnetId, int score);
+    void scoreStudentWithNusnetId(NusnetId nusnetId, double score);
 
     /**
      * Marks the attendances of all {@code students} with the given {@code attendanceType}
      */
-    void scoreAllStudents(List<Student> students, int score);
+    void scoreAllStudents(List<StudentRecord> students, double score);
 
     /**
      * Updates the corresponding attendance statuses with the Attendances in the given list.
      */
     void updateStudentRecords(List<StudentRecord> studentRecords);
+
+    /**
+     * Updates the filter of the filtered student list to show a random student.
+     */
+    void showRandomStudent();
 
     /**
      * Clears the attendance statuses of all students in the student list.

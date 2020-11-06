@@ -6,6 +6,9 @@ skinparam classBackgroundColor MODEL_COLOR
 
 package Session {
     Class Session
+}
+
+package Record {
     Interface StudentRecordList <<Interface>>
     Class StudentRecordListManager
     Class StudentRecord

@@ -159,7 +159,7 @@ Given below is the planned Sequence Diagram for interactions within the `Session
 
 <br>
 
-### StudentRecordList
+### StudentRecordList and StudentRecord
 
 Author: **Goh Siau Chiak**
 
@@ -174,23 +174,55 @@ The `StudentRecordList`,
 * can mark the attendance of a student in the `Session`.
 
 The `StudentRecord`,
-* represents a record of a student's attendance in a particular `Session`
+* represents an immutable record of a student's attendance in a particular `Session`
 * contains
   * a `NusnetId` that indicates which student the record represents
   * the `Name` of the student represented
   * the `AttendanceType` of the student for the `Session`
-  * a `ClassParticipation` representing points awarded to the student for participating in the `Session`
+  * a `ClassParticipation` representing the score awarded to the student for participating in the `Session`
+
+When the user wants to update the attendance or class participation score, a new `StudentRecord` object will be created. 
 
 Given below is the Sequence Diagram for interactions within the `StudentRecordListManager` component when `StudentRecordListManager#markStudentAttendance(nusnetId, attendanceType)` is called.
 
 ![Interactions inside the StudentRecordListManager class for the `markStudentAttendance'` method call](images/StudentRecordListAttendanceSequenceDiagram.png)
 
+Design alternatives:
+- Make `StudentRecord` mutable.
 
-Alternative implementations:
-* Store a `Student` object in the `StudentRecord` instead of just their `Name` and `NusnetId`.
-  * Doing so will incur unnecessary memory usage, because `StudentRecord` only needs the `Name` for display purposes, and `NusnetId` for identification purposes.
-  * This memory usage is significant when one considers the fact that it will be likely that for most users, the same students (that the TA is teaching) will be contained in multiple `Session` objects.
-  * Since editing of `NusnetId` is not allowed, there will be no issues with syncing of data. For example, even if the name of a particular student is edited after his `StudentRecord` was saved, we can find that student using their `NusnetId`.
+    This was the original design of `StudentRecord` which made sense at the time because a student's record
+    would be frequently updated for marking of attendnace and awarding of class participation scores. However,
+    the JavaFX `ObservableList` interface is **not notified when contained objects are modified**, only when 
+    objects were added or deleted. This resulted in a bug where the GUI will not show the changes made when a
+    student record was updated. In the end, it was decided that `StudentRecord` should be immutable to fix this bug.
+
+- Make each `StudentRecordList` be dependent on and backed by the `StudentList` maintained by TAskmaster.
+
+    This alternative was eventually rejected because it did not make sense from a design perspective. Each
+    student record list represents the record of students **for that particular session only**. If we 
+    implemented this alternative, edits to the student list will result in changes to all the student record
+    lists, which does not follow the design of the student record list. For example:
+    - suppose a TA is currently teaching three students, `A, B, C`
+    - when the TA creates a new session `S1` , it will contain three corresponding student records
+    - subsequently after the session is over, student `A` informs the TA that he is going to drop the module
+    - when the TA deletes student `A` from the student list, the student record list of `S1` will update and
+    no longer reflect that `A` was enrolled in the module when `S1` occurred
+
+- Have `StudentRecord` contain the whole `Student` object, not just its `Name` and `NusnetId`
+
+    This was considered and ultimately rejected because of the design considerations in the previous 
+    alternative. Each student record, once created, is supposed to be independent of the student in the
+    student list. This implies that subsequent changes to the student should not be known by the student
+    record. Moreover, each student record only needs to know the name and NUSNET ID of the student at the moment 
+    it was created and there is no need for it to know the rest of the student's information. 
+    
+    Furthermore, having
+    each student record contain a student object will incur significant memory usage, especially since for most
+    TAs, the same set of students will be enrolled in multiple sessions, each with a student record list. 
+    Following the **Law of Demeter**, it was decided to restrict the student record to only have the name and NUSNET ID.
+    Since editing of `NusnetId` is not allowed, there will be no issues with syncing of data. For example, even if the
+    name of a particular student is edited after his `StudentRecord` was saved, we can find that student using their
+    `NusnetId`.
 
 <br>
 
@@ -316,14 +348,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1.  User requests to add a new student
 2.  System shows the added student
 
-    Use case ends.
+Use case ends.
 
 **Extensions**
 
 * 1a. The given input is invalid.
-
     * 1a1. System shows an error message.
-
       Use case resumes at step 1.
 <br>
 
@@ -334,14 +364,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1.  User requests to view a student's details
 2.  System shows the student's details
 
-    Use case ends.
+Use case ends.
 
 **Extensions**
 
 * 1a. The given input is invalid.
-
     * 1a1. System shows an error message.
-
       Use case resumes at step 1.
 <br>
 
@@ -356,7 +384,6 @@ Use case ends.
 **Extensions**
 
 * 1a. The given input is invalid.
-
     * 1a1. System shows an error message.
       Use case resumes at step 1.
 <br>
@@ -366,6 +393,8 @@ Use case ends.
 **MSS**
 1. User requests to view all students' details
 2. System shows all students' details.
+
+Use case ends.
 <br>
 
 **Use Case: Delete a student**
@@ -376,15 +405,125 @@ Use case ends.
 3. User requests to delete a specific student in the list
 4. System deletes student
 
-Extensions
-* 2a. The list is empty.
 Use case ends.
+
+Extensions
+* 2a. The list is empty. <br>
+    Use case ends.
+    
 * 3a. The given input is invalid.
     * 3a1. System shows an error message.
         Use case resumes at step 2.
 <br>
 
+**Use Case: Add a session**
+
+**MSS**
+1. User requests to add a session
+2. System adds the session and shows the student records for that session with default fields
+
+Extensions
+* 1a. The given input is invalid.
+    * 1a1. System shows an error message.
+        Use case resumes at step 1.
+        
+* 1b. The name of the session given by the user is already in use.
+    * 1b1. System shows an error message.
+        Use case resumes at step 1.
+
 <br>
+
+**Use Case: Change view to a session**
+
+**MSS**
+1. User requests to view information (student records) of a session
+2. System displays student records of that session
+
+Extensions
+* 1a. The given input is invalid.
+    * 1a1. System shows an error message.
+        Use case resumes at step 1.
+        
+<br>
+
+**Use Case: Delete a session**
+
+**MSS**
+1. User requests to delete a session
+2. System deletes the session
+
+Extensions
+* 1a. The given input is invalid.
+    * 1a1. System shows an error message.
+        Use case resumes at step 1.
+
+<br>
+
+**Use Case: Mark a student's attendance**
+
+**MSS**
+1. User requests to mark student attendance.
+2. System marks the student's attendance within the context of that session.
+
+Extensions
+* 1a. System is not within the context of a session.
+    * 1a1. System shows an error message.
+    Use case ends.
+    
+* 1b. The given input is invalid.
+    * 1b1. System shows an error message.
+        Use case resumes at step 1.
+
+<br>
+
+**Use Case: Mark all students attendance**
+
+**MSS**
+1. User requests to mark all students' attendance.
+2. System marks all student attendances within the context of that session.
+
+Extensions
+* 1a. System is not within the context of a session.
+    * 1a1. System shows an error message.
+    Use case ends.
+    
+* 1b. The given input is invalid.
+    * 1b1. System shows an error message.
+        Use case resumes at step 1.
+
+<br>
+
+**Use Case: Score student's participation**
+
+**MSS**
+1. User requests to score participation.
+2. System scores the student's participation within the context of that session.
+
+Extensions
+* 1a. System is not within the context of a session.
+    * 1a1. System shows an error message.
+    Use case ends.
+    
+* 1b. The given input is invalid.
+    * 1b1. System shows an error message.
+        Use case resumes at step 1.
+
+<br>
+
+**Use Case: Score all students' participation**
+
+**MSS**
+1. User requests to score all students' participation.
+2. System scores all student participation within the context of that session.
+
+Extensions
+* 1a. System is not within the context of a session.
+    * 1a1. System shows an error message.
+    Use case ends.
+    
+* 1b. The given input is invalid.
+    * 1b1. System shows an error message.
+        Use case resumes at step 1.
 
 
 *{More to be added}*

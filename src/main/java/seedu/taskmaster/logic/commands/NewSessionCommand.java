@@ -11,13 +11,12 @@ import seedu.taskmaster.model.session.Session;
 import seedu.taskmaster.model.session.SessionDateTime;
 import seedu.taskmaster.model.session.SessionName;
 
-
 /**
  * Adds a session to the session list.
  */
 public class NewSessionCommand extends Command {
 
-    public static final String COMMAND_WORD = "session";
+    public static final String COMMAND_WORD = "add-session";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a session to the session list. "
             + "Parameters: "
@@ -28,9 +27,10 @@ public class NewSessionCommand extends Command {
             + PREFIX_SESSION_DATE_TIME + "23-10-2020 0900";
 
     public static final String MESSAGE_SUCCESS = "New session added: %1$s";
-    public static final String MESSAGE_DUPLICATE_SESSION = "This session already exists in the session list";
+    public static final String MESSAGE_DUPLICATE_SESSION = "Cannot add session:\n"
+            + "A session with the same name already exists in the session list";
 
-    protected StudentRecordList studentRecordList = null;
+    private StudentRecordList studentRecordList = null;
     private final SessionName sessionName;
     private final SessionDateTime sessionDateTime;
 
@@ -55,22 +55,32 @@ public class NewSessionCommand extends Command {
         // At the point of execution, student records must be set.
         requireNonNull(studentRecordList);
 
-        Session toAdd = new Session(sessionName, sessionDateTime, studentRecordList);
-
-        if (model.hasSession(toAdd)) {
+        // If the Taskmaster already has a session with the same name, throw an error
+        if (model.hasSession(sessionName)) {
             throw new CommandException(MESSAGE_DUPLICATE_SESSION);
         }
 
+        Session toAdd = new Session(sessionName, sessionDateTime, studentRecordList);
         model.addSession(toAdd);
+
         return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
     }
 
     @Override
     public boolean equals(Object other) {
-        return other == this // short circuit if same object
-                || (other instanceof NewSessionCommand // instanceof handles nulls
-                && sessionName.equals(((NewSessionCommand) other).sessionName)
-                && sessionDateTime.equals(((NewSessionCommand) other).sessionDateTime)
-                && studentRecordList.equals(((NewSessionCommand) other).studentRecordList));
+        if (other == this) { // short circuit if same object
+            return true;
+        }
+        if (studentRecordList == null) {
+            return other instanceof NewSessionCommand
+                    && sessionName.equals(((NewSessionCommand) other).sessionName)
+                    && sessionDateTime.equals(((NewSessionCommand) other).sessionDateTime)
+                    && ((NewSessionCommand) other).studentRecordList == null;
+        } else {
+            return other instanceof NewSessionCommand // instanceof handles nulls
+                    && sessionName.equals(((NewSessionCommand) other).sessionName)
+                    && sessionDateTime.equals(((NewSessionCommand) other).sessionDateTime)
+                    && studentRecordList.equals(((NewSessionCommand) other).studentRecordList);
+        }
     }
 }

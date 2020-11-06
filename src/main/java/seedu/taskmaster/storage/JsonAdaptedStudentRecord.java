@@ -82,7 +82,8 @@ class JsonAdaptedStudentRecord {
         final AttendanceType modelAttendanceType = AttendanceType.valueOf(attendanceType);
 
 
-        final ClassParticipation classParticipation = new ClassParticipation(Integer.parseInt(this.classParticipation));
+        final ClassParticipation classParticipation = new ClassParticipation(
+                Double.parseDouble(this.classParticipation));
 
         return new StudentRecord(modelName, modelNusnetId, modelAttendanceType, classParticipation);
     }

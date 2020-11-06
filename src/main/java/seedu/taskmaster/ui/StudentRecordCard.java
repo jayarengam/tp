@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import seedu.taskmaster.model.record.AttendanceType;
 import seedu.taskmaster.model.record.StudentRecord;
 
 /**
@@ -46,18 +47,23 @@ public class StudentRecordCard extends UiPart<Region> {
 
         String studentName = studentRecord.getName().fullName;
         String studentNusnetId = studentRecord.getNusnetId().value;
-        String studentAttendanceStatus = studentRecord.getAttendanceType().name();
-        String studentClassParticipation = studentRecord.getClassParticipation().description();
+        String studentClassParticipation = String.valueOf(studentRecord.getClassParticipation().getRawScore());
 
         assert studentName.length() > 0;
         assert studentNusnetId.length() > 0;
-        assert studentAttendanceStatus.length() > 0;
         assert studentClassParticipation.length() > 0;
 
         name.setText(studentName);
         nusnetId.setText(studentNusnetId);
-        attendanceStatus.setText(studentAttendanceStatus);
+        setAttendanceStatus(studentRecord.getAttendanceType());
         classParticipation.setText(studentClassParticipation);
+    }
+
+    private void setAttendanceStatus(AttendanceType attendanceType) {
+        attendanceStatus.setText(attendanceType.getDescription());
+        attendanceStatus.setStyle(String.format("-fx-background-color: %s; "
+                + "-fx-background-radius: 3; -fx-padding: 1 3 1 3",
+                attendanceType.getColor()));
     }
 
     @Override

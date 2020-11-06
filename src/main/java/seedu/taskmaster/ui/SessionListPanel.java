@@ -60,10 +60,10 @@ public class SessionListPanel extends UiPart<Region> {
                 setText(null);
             } else {
                 SessionName sessionName = session.getSessionName();
-                button.setText(sessionName.name + "\n [" + session.getSessionDateTime().displayDateTime() + "]");
+                button.setText(sessionName.name + "\n" + session.getSessionDateTime().getDisplayDateTimeString());
                 button.setMinSize(100, 50);
-                button.setMaxWidth(100);
-                button.setStyle("-fx-alignment: center-left;");
+                button.setMaxWidth(140);
+                button.setStyle("-fx-font-size:13; -fx-alignment: center-left;");
                 AnchorPane.setBottomAnchor(button, 0.0);
                 AnchorPane.setLeftAnchor(button, 0.0);
                 AnchorPane.setRightAnchor(button, 0.0);
@@ -77,6 +77,7 @@ public class SessionListPanel extends UiPart<Region> {
                 });
                 AnchorPane anchorPane = new AnchorPane();
                 anchorPane.getChildren().add(button);
+                anchorPane.setStyle("-fx-padding: 3 0 3 0; -fx-background-color: #383838; -fx-border-color: #383838");
                 setGraphic(anchorPane);
             }
         }

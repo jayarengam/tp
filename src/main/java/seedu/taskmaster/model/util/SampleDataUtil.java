@@ -29,37 +29,37 @@ public class SampleDataUtil {
                     new Telegram("alexyeoh"),
                     new Email("alexyeoh@example.com"),
                     new NusnetId("e0456456"),
-                    getTagSet("friends")),
+                    getTagSet("smartalec")),
             new Student(
                     new Name("Bernice Yu"),
                     new Telegram("notverynice"),
                     new Email("berniceyu@example.com"),
                     new NusnetId("e0789789"),
-                    getTagSet("colleagues", "friends")),
+                    getTagSet("alwayslate", "weak")),
             new Student(
                     new Name("Charlotte Oliveiro"),
                     new Telegram("charlotte_o"),
                     new Email("charlotte@example.com"),
                     new NusnetId("e0987897"),
-                    getTagSet("neighbours")),
+                    getTagSet("good")),
             new Student(
                     new Name("David Li"),
                     new Telegram("david_light"),
                     new Email("lidavid@example.com"),
                     new NusnetId("e0321321"),
-                    getTagSet("family")),
+                    getTagSet("slacker")),
             new Student(
                     new Name("Irfan Ibrahim"),
                     new Telegram("irfan"),
                     new Email("irfan@example.com"),
                     new NusnetId("e0984984"),
-                    getTagSet("classmates")),
+                    getTagSet("smart")),
             new Student(
                     new Name("Roy Balakrishnan"),
                     new Telegram("roy_bk"),
                     new Email("royb@example.com"),
                     new NusnetId("e0984983"),
-                    getTagSet("colleagues"))
+                    getTagSet("smart"))
         };
     }
 

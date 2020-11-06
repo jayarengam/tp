@@ -19,7 +19,7 @@ public class StudentBuilder {
     public static final String DEFAULT_NAME = "Alice Pauline";
     public static final String DEFAULT_TELEGRAM = "85355255";
     public static final String DEFAULT_EMAIL = "alice@gmail.com";
-    public static final String DEFAULT_NUSNETID = "e0123456";
+    public static final String DEFAULT_NUSNETID = "e0012312";
 
     private Name name;
     private Telegram telegram;

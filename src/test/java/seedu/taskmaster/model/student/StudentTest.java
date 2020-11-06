@@ -31,14 +31,14 @@ public class StudentTest {
         // null -> returns false
         assertFalse(ALICE.isSameStudent(null));
 
-        // different telegram and email -> returns false
+        // different telegram and email but same nusnetId -> returns true
         Student editedAlice = new StudentBuilder(ALICE)
                 .withTelegram(VALID_TELEGRAM_BOB).withEmail(VALID_EMAIL_BOB).build();
-        assertFalse(ALICE.isSameStudent(editedAlice));
+        assertTrue(ALICE.isSameStudent(editedAlice));
 
-        // different name -> returns false
+        // different name but same nusnetId -> returns true
         editedAlice = new StudentBuilder(ALICE).withName(VALID_NAME_BOB).build();
-        assertFalse(ALICE.isSameStudent(editedAlice));
+        assertTrue(ALICE.isSameStudent(editedAlice));
 
         // same name, same telegram, different attributes -> returns true
         editedAlice = new StudentBuilder(ALICE).withEmail(VALID_EMAIL_BOB).withNusnetId(VALID_NUSNETID_BOB)

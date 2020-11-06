@@ -8,8 +8,8 @@ import java.util.List;
 import seedu.taskmaster.logic.commands.exceptions.CommandException;
 import seedu.taskmaster.model.Model;
 import seedu.taskmaster.model.record.AttendanceType;
+import seedu.taskmaster.model.record.StudentRecord;
 import seedu.taskmaster.model.session.exceptions.SessionException;
-import seedu.taskmaster.model.student.Student;
 
 public class MarkAllCommand extends MarkCommand {
     public static final String COMMAND_WORD = "mark all";
@@ -29,9 +29,9 @@ public class MarkAllCommand extends MarkCommand {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        List<Student> lastShownList = model.getFilteredStudentList();
         try {
-            model.markAllStudents(lastShownList, attendanceType);
+            List<StudentRecord> lastShownList = model.getFilteredStudentRecordList();
+            model.markAllStudentRecords(lastShownList, attendanceType);
         } catch (SessionException sessionException) {
             throw new CommandException(sessionException.getMessage());
         }

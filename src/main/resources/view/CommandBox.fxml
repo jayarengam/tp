@@ -5,7 +5,7 @@
 <?import javafx.scene.text.Font?>
 
 <StackPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" styleClass="stack-pane"
-           xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+           xmlns="http://javafx.com/javafx/11.0.0" xmlns:fx="http://javafx.com/fxml/1">
   <TextField fx:id="commandTextField" onAction="#handleCommandEntered" promptText="Enter command here...">
       <font>
          <Font name="Consolas" size="12.0" />
