@@ -3,8 +3,9 @@ package seedu.taskmaster.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.taskmaster.logic.commands.CommandTestUtil.VALID_NUSNETID_BOB;
+import static seedu.taskmaster.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.taskmaster.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
+import static seedu.taskmaster.logic.commands.CommandTestUtil.VALID_TELEGRAM_BOB;
 import static seedu.taskmaster.testutil.Assert.assertThrows;
 import static seedu.taskmaster.testutil.TypicalStudents.ALICE;
 import static seedu.taskmaster.testutil.TypicalStudents.getTypicalSession;
@@ -57,8 +58,8 @@ public class TaskmasterTest {
     @Test
     public void resetData_withDuplicateStudents_throwsDuplicateStudentException() {
         // Two students with the same identity fields
-        Student editedAlice = new StudentBuilder(ALICE).withNusnetId(VALID_NUSNETID_BOB).withTags(VALID_TAG_HUSBAND)
-                .build();
+        Student editedAlice = new StudentBuilder(ALICE).withEmail(VALID_EMAIL_BOB).withTelegram(VALID_TELEGRAM_BOB)
+                .withTags(VALID_TAG_HUSBAND).build();
         List<Student> newStudents = Arrays.asList(ALICE, editedAlice);
         TaskmasterStub newData = new TaskmasterStub(newStudents);
 
@@ -166,8 +167,8 @@ public class TaskmasterTest {
     @Test
     public void hasStudent_studentWithSameIdentityFieldsInStudentList_returnsTrue() {
         taskmaster.addStudent(ALICE);
-        Student editedAlice = new StudentBuilder(ALICE).withNusnetId(VALID_NUSNETID_BOB).withTags(VALID_TAG_HUSBAND)
-                .build();
+        Student editedAlice = new StudentBuilder(ALICE).withEmail(VALID_EMAIL_BOB).withTelegram(VALID_TELEGRAM_BOB)
+                .withTags(VALID_TAG_HUSBAND).build();
         assertTrue(taskmaster.hasStudent(editedAlice));
     }
 

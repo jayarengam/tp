@@ -42,6 +42,8 @@ public class DeleteSessionCommandTest {
         Model model = new ModelManager(getTypicalTaskmaster(), new UserPrefs());
         model.addSession(toDelete);
         Model expectedModel = new ModelManager(getTypicalTaskmaster(), new UserPrefs());
+        expectedModel.addSession(toDelete);
+        expectedModel.deleteSession(sessionName);
         String expectedMessage = String.format(DeleteSessionCommand.MESSAGE_SUCCESS, sessionName);
         assertCommandSuccess(deleteSessionCommand, model, expectedMessage, expectedModel);
     }

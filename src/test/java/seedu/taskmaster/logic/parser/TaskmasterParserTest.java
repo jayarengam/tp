@@ -22,7 +22,7 @@ import seedu.taskmaster.logic.commands.EditCommand.EditStudentDescriptor;
 import seedu.taskmaster.logic.commands.ExitCommand;
 import seedu.taskmaster.logic.commands.FindCommand;
 import seedu.taskmaster.logic.commands.HelpCommand;
-import seedu.taskmaster.logic.commands.ListCommand;
+import seedu.taskmaster.logic.commands.ListStudentsCommand;
 import seedu.taskmaster.logic.commands.ParticipationCommand;
 import seedu.taskmaster.logic.parser.exceptions.ParseException;
 import seedu.taskmaster.model.student.NameContainsKeywordsPredicate;
@@ -86,8 +86,8 @@ public class TaskmasterParserTest {
 
     @Test
     public void parseCommand_list() throws Exception {
-        assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD) instanceof ListCommand);
-        assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD + " 3") instanceof ListCommand);
+        assertTrue(parser.parseCommand(ListStudentsCommand.COMMAND_WORD) instanceof ListStudentsCommand);
+        assertTrue(parser.parseCommand(ListStudentsCommand.COMMAND_WORD + " 3") instanceof ListStudentsCommand);
     }
 
     @Test

@@ -40,19 +40,19 @@ public class StudentTest {
         editedAlice = new StudentBuilder(ALICE).withName(VALID_NAME_BOB).build();
         assertTrue(ALICE.isSameStudent(editedAlice));
 
-        // same name, same telegram, different attributes -> returns true
+        // same name, same telegram, different nusnetId -> returns false
         editedAlice = new StudentBuilder(ALICE).withEmail(VALID_EMAIL_BOB).withNusnetId(VALID_NUSNETID_BOB)
                 .withTags(VALID_TAG_HUSBAND).build();
-        assertTrue(ALICE.isSameStudent(editedAlice));
+        assertFalse(ALICE.isSameStudent(editedAlice));
 
-        // same name, same email, different attributes -> returns true
+        // same name, same email, different nusnetId -> returns false
         editedAlice = new StudentBuilder(ALICE).withTelegram(VALID_TELEGRAM_BOB).withNusnetId(VALID_NUSNETID_BOB)
                 .withTags(VALID_TAG_HUSBAND).build();
-        assertTrue(ALICE.isSameStudent(editedAlice));
+        assertFalse(ALICE.isSameStudent(editedAlice));
 
-        // same name, same telegram, same email, different attributes -> returns true
+        // same name, same telegram, same email, different nusnetId -> returns false
         editedAlice = new StudentBuilder(ALICE).withNusnetId(VALID_NUSNETID_BOB).withTags(VALID_TAG_HUSBAND).build();
-        assertTrue(ALICE.isSameStudent(editedAlice));
+        assertFalse(ALICE.isSameStudent(editedAlice));
     }
 
     @Test

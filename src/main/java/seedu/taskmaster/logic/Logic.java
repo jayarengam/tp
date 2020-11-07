@@ -60,6 +60,8 @@ public interface Logic {
 
     void changeSession(SessionName sessionName);
 
+    void showStudentList();
+
     SimpleObjectProperty<Session> getCurrentSession();
 
 }

@@ -111,6 +111,11 @@ public class LogicManager implements Logic {
     }
 
     @Override
+    public void showStudentList() {
+        model.showStudentList();
+    }
+
+    @Override
     public SimpleObjectProperty<Session> getCurrentSession() {
         return this.model.getCurrentSession();
     }

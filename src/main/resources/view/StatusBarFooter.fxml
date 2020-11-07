@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <GridPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="15.0" styleClass="status-bar"
-          xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" AnchorPane.bottomAnchor="0.0"
+          xmlns="http://javafx.com/javafx/11.0.0" xmlns:fx="http://javafx.com/fxml/1" AnchorPane.bottomAnchor="0.0"
           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10" />

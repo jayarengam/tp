@@ -102,8 +102,9 @@ Given below is the Sequence Diagram for interactions within the `Logic` componen
 The `Model`,
 
 * stores a `UserPref` object that represents the user’s preferences.
-* stores the student list data.
+* stores the student list data as a `Taskmaster` object.
 * exposes an unmodifiable `ObservableList<Student>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
+* also exposes an unmodifiable `ObservableList<Session>` that is similarly used by the UI.
 * does not depend on any of the other three components.
 
 
@@ -122,6 +123,7 @@ The `Model`,
 The `Storage` component,
 * can save `UserPref` objects in json format and read it back.
 * can save the student list data in json format and read it back.
+* can save the SessionList data in json format and read it back.
 
 ### Common classes
 
@@ -129,7 +131,7 @@ Classes used by multiple components are in the `seedu.taskmaster.commons` packag
 
 --------------------------------------------------------------------------------------------------------------------
 
-## **Additional Features to Be Implemented**
+## **Additional Features Implemented**
 
 ### SessionList
 
@@ -159,7 +161,7 @@ Given below is the planned Sequence Diagram for interactions within the `Session
 
 <br>
 
-### StudentRecordList and StudentRecord
+### StudentRecordList
 
 Author: **Goh Siau Chiak**
 
@@ -186,6 +188,16 @@ When the user wants to update the attendance or class participation score, a new
 Given below is the Sequence Diagram for interactions within the `StudentRecordListManager` component when `StudentRecordListManager#markStudentAttendance(nusnetId, attendanceType)` is called.
 
 ![Interactions inside the StudentRecordListManager class for the `markStudentAttendance'` method call](images/StudentRecordListAttendanceSequenceDiagram.png)
+
+Considerations for `markStudentAttendance`:
+    
+On one hand, the mark command uses an index to identify the record, for ease of usage for the user, as compared to 
+having to type out the record's NUSNET ID. On the other hand, the mark attendance method within the `Model` identifies 
+the record to mark using its NUSNET ID, to ensure correctness. Furthermore, the student records have to be stored in a 
+JavaFX `ObservableList` to be easily displayable on the GUI. In the end, I decided to find the record to mark by 
+iterating through the record list and comparing NUSNET IDs, since each student's NUSNET ID must be unique. The `O(N)`
+time complexity of this method does not incur significant time cost because we expect there to be no more than 1000
+students recorded in any session created by TAs using TAskmaster.
 
 Design alternatives:
 - Make `StudentRecord` mutable.
@@ -323,17 +335,27 @@ Alternative implementations considered:
 * manage students faster than a typical mouse/GUI driven app
 * view student details at a glance
 * add and remove students easily
+* create student records for each individual class conducted
+* mark and view attendance and class participation in these classes quickly
 
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
 | Priority | As a …​                                    | I want to …​                     | So that I can…​                                             |
-| -------- | ------------------------------------------ | -------------------------------- | ----------------------------------------------------------- |
-| `* * *`  | user                                       | add a new student                |                                                             |
-| `* * *`  | user                                       | view details of a student        | have quick access to them                                   |
-| `* * *`  | user                                       | view details of all my students  | have quick access to them                                   |
-| `* * *`  | user                                       | delete a student                 |                                                             |
+| -------- | ------------------------------------------ | --------------------------------- | -------------------------------------------------------------- |
+| `* * *`  | user                                       | add a new student                 |                                                                |
+| `* * *`  | user                                       | view details of a student         | have quick access to them                                      |
+| `* * *`  | user                                       | view details of all my students   | have quick access to them                                      |
+| `* * *`  | user                                       | mark a student's attendance       |                                                                |
+| `* * *`  | user                                       | mark all students' attendance     | update all attendance records quickly and focus on teaching    |
+| `* * *`  | user                                       | score a student's participation   |                                                                |
+| `* * *`  | user                                       | score all students; participation | update all participation records quickly and focus on teaching |
+| `* * *`  | user                                       | delete a student                  |                                                                |
+| `* * *`  | user                                       | add a new session                 |                                                                |
+| `* * *`  | user                                       | view details of a session         | have quick access to it                                        |
+| `* * *`  | user                                       | delete a session                  |                                                                |
+
 
 *{More to be added}*
 
@@ -341,6 +363,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 (For all use cases below, the **System** is `Taskmaster` and the **Actor** is the `user`, unless specified otherwise)
 <br>
+
+
 **Use case: Add a student**
 
 **MSS**
@@ -356,6 +380,7 @@ Use case ends.
     * 1a1. System shows an error message.
       Use case resumes at step 1.
 <br>
+
 
 **Use case: View a student's details**
 
@@ -373,20 +398,6 @@ Use case ends.
       Use case resumes at step 1.
 <br>
 
-**Use Case: Mark Student Attendance**
-
-**MSS**
-1. User requests to mark student as present/absent
-2. System shows student attendance as present/absent
-
-Use case ends.
-
-**Extensions**
-
-* 1a. The given input is invalid.
-    * 1a1. System shows an error message.
-      Use case resumes at step 1.
-<br>
 
 **Use Case: View all students' details**
 
@@ -396,6 +407,7 @@ Use case ends.
 
 Use case ends.
 <br>
+
 
 **Use Case: Delete a student**
 
@@ -416,6 +428,7 @@ Extensions
         Use case resumes at step 2.
 <br>
 
+
 **Use Case: Add a session**
 
 **MSS**
@@ -433,6 +446,7 @@ Extensions
 
 <br>
 
+
 **Use Case: Change view to a session**
 
 **MSS**
@@ -446,6 +460,7 @@ Extensions
         
 <br>
 
+
 **Use Case: Delete a session**
 
 **MSS**
@@ -458,6 +473,7 @@ Extensions
         Use case resumes at step 1.
 
 <br>
+
 
 **Use Case: Mark a student's attendance**
 
@@ -476,7 +492,8 @@ Extensions
 
 <br>
 
-**Use Case: Mark all students attendance**
+
+**Use Case: Mark all students' attendances**
 
 **MSS**
 1. User requests to mark all students' attendance.
@@ -492,6 +509,7 @@ Extensions
         Use case resumes at step 1.
 
 <br>
+
 
 **Use Case: Score student's participation**
 
@@ -509,6 +527,7 @@ Extensions
         Use case resumes at step 1.
 
 <br>
+
 
 **Use Case: Score all students' participation**
 
@@ -564,7 +583,7 @@ testers are expected to do more *exploratory* testing.
 
    1. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   1. Double-click the jar file Expected: Shows the GUI with a set of sample students. The window size may not be optimal.
 
 1. Saving window preferences
 
@@ -575,22 +594,133 @@ testers are expected to do more *exploratory* testing.
 
 1. _{ more test cases …​ }_
 
+### Adding a student
+
+1. Adding a student while all students are being shown
+
+   1. Prerequisites: List all students using the `list-students` command. Multiple students in the list.
+
+   1. Test case: `add-student n/John Tan u/johntan98 e/johntan98@gmail.com i/e0012345 t/tardy`<br>
+      Expected: A student named John Tan is added to the list. Details of the added student shown in the status message.
+
+   1. Test case: `add-student n/John Tan u/johntan98 e/johntan98@gmail.com i/e0012345 t/tardy`<br>
+      Expected: No student is added because a student with the same details already exists in the list. Status message informs user that student already exists.
+
+   1. Test case: `add-student n/Gandalf`<br>
+      Expected: No student is added. Error details shown in the status message.
+
+   1. Other incorrect add commands to try: `add-student`, `add-student Gandalf`, `...`<br>
+      Expected: Similar to previous.
+      
+### Finding a student
+
+1. Finding a student whose name exists in the student list
+
+   1. Prerequisites: List all students using the `list-students` command. Multiple students in the list.
+
+   1. Test case: `find-students john`<br>
+      Expected: A list of students whose names match the keyword `john` will be shown.
+
+   1. Test case: `find-students`<br>
+      Expected: No change to the student list view. Error details shown in the status message.
+      
+### Editing a student
+
+1. Editing a student while all students are being shown
+
+   1. Prerequisites: List all students using the `list-students` command. Multiple students in the list.
+
+   1. Test case: `edit-student 1 u/johntan68 e/johntan68@gmail.com`<br>
+      Expected: First student's Telegram handle will be changed to `johntan68`, and his email to `johntan68@gmail.com`.
+
+   1. Test case: `edit-student 0 u/johntan98 e/johntan98@gmail.com`<br>
+      Expected: No student is edited. Error details shown in the status message.
+   
+   1. Other incorrect delete commands to try: `edit-student`, `edit-student x`, `...` (where x is larger than the list size)<br>
+      Expected: Similar to previous.
+
 ### Deleting a student
 
 1. Deleting a student while all students are being shown
 
-   1. Prerequisites: List all students using the `list` command. Multiple students in the list.
+   1. Prerequisites: List all students using the `list-students` command. Multiple students in the list.
 
-   1. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+   1. Test case: `delete-student 1`<br>
+      Expected: First student is deleted from the list. Details of the deleted student shown in the status message.
 
-   1. Test case: `delete 0`<br>
-      Expected: No student is deleted. Error details shown in the status message. Status bar remains the same.
+   1. Test case: `delete-student 0`<br>
+      Expected: No student is deleted. Error details shown in the status message.
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+   1. Other incorrect delete commands to try: `delete-student`, `delete-student x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
-1. _{ more test cases …​ }_
+
+### Adding a session
+
+1. Adding a new session 
+
+   1. Test case: `add-session s/First Session dt/23-10-2020 0900`<br>
+      Expected: A session named First Session is added to the session list. Details of the added session shown in the status message.
+
+   1. Test case: `add-session s/First Session dt/24-10-2020 0900`<br>
+      Expected: No session is added as a session with the same name is already found in the session list. Status message informs user that session already exists.
+
+   1. Test case: `add-session`<br>
+      Expected: No session is added. Error details shown in the status message.
+
+   1. Other incorrect add commands to try: `add-session First Session`, `...`<br>
+      Expected: Similar to previous.
+   
+
+### Changing the current session view
+
+1. Changing the current session view
+
+   1. Prerequisites: Add a session to the session list by running the command `add-session s/First Session dt/23-10-2020 0900`.
+
+   1. Test case: `goto s/First Session`<br>
+      Expected: The student records of the session named First Session will be displayed.
+
+   1. Test case: `goto s/Session that does not exist`<br>
+      Expected: Current view does not change. Status message states that the session does not exist.
+   
+   1. Test case: `goto`<br>
+      Expected: Current view does not change. Error details shown in the status message.
+
+   1. Other incorrect add commands to try: `goto First Session`, `...`<br>
+      Expected: Similar to previous.
+
+
+### Clearing contents of student and session list
+
+1. Clearing contents of student and session list
+
+   1. Test case: `clear`<br>
+      Expected: The contents of the student and session list will be emptied.
+      
+
+### Deleting a session
+
+1. Deleting a session
+
+   1. Prerequisites: Add a session to the session list by running the command `add-session s/First Session dt/23-10-2020 0900`.
+
+   1. Test case: `delete-session s/First Session`<br>
+      Expected: First session is deleted from the list.
+
+   1. Test case: `delete-session s/Session that does not exist`<br>
+      Expected: No session is deleted. Status message informs user that there are no sessions in the session list with that name.
+
+   1. Other incorrect delete commands to try: `delete-session`, `delete-session First Session`<br>
+      Expected: Similar to previous.
+
+### Exiting the program
+
+1. Exiting the program
+
+   1. Test case: `exit`<br>
+      Expected: The window of the program will close.
+
 
 ### Saving data
 

@@ -73,9 +73,7 @@ public class Student {
             return false;
         }
 
-        return otherStudent.getNusnetId().equals(getNusnetId())
-                || (otherStudent.getName().equals(getName())
-                && (otherStudent.getTelegram().equals(getTelegram()) || otherStudent.getEmail().equals(getEmail())));
+        return otherStudent.getNusnetId().equals(getNusnetId());
     }
 
     /**

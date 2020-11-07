@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.stage.Stage?>
 
-<fx:root minHeight="400.0" minWidth="600.0" onCloseRequest="#handleExit" title="Taskmaster" type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root minHeight="400.0" minWidth="600.0" onCloseRequest="#handleExit" title="Taskmaster" type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/11.0.0" xmlns:fx="http://javafx.com/fxml/1">
   <icons>
     <Image url="@/images/TAskmaster_icon.png" />
   </icons>

@@ -3,8 +3,10 @@ package seedu.taskmaster.model.student;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.taskmaster.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.taskmaster.logic.commands.CommandTestUtil.VALID_NUSNETID_BOB;
 import static seedu.taskmaster.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
+import static seedu.taskmaster.logic.commands.CommandTestUtil.VALID_TELEGRAM_BOB;
 import static seedu.taskmaster.testutil.Assert.assertThrows;
 import static seedu.taskmaster.testutil.TypicalStudents.ALICE;
 import static seedu.taskmaster.testutil.TypicalStudents.BOB;
@@ -42,8 +44,8 @@ public class UniqueStudentListTest {
     @Test
     public void contains_studentWithSameIdentityFieldsInList_returnsTrue() {
         uniqueStudentList.add(ALICE);
-        Student editedAlice = new StudentBuilder(ALICE).withNusnetId(VALID_NUSNETID_BOB).withTags(VALID_TAG_HUSBAND)
-                .build();
+        Student editedAlice = new StudentBuilder(ALICE).withEmail(VALID_EMAIL_BOB).withTelegram(VALID_TELEGRAM_BOB)
+                .withTags(VALID_TAG_HUSBAND).build();
         assertTrue(uniqueStudentList.contains(editedAlice));
     }
 

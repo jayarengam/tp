@@ -5,6 +5,7 @@ import static seedu.taskmaster.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -128,7 +129,7 @@ public class ModelManager implements Model {
         updateFilteredSessionList(PREDICATE_SHOW_ALL_SESSIONS);
         filteredStudentRecords = null;
         taskmaster.addSession(session);
-        taskmaster.changeSession(session.getSessionName());
+        changeSession(session.getSessionName());
     }
 
     /**
@@ -136,11 +137,10 @@ public class ModelManager implements Model {
      */
     @Override
     public void changeSession(SessionName sessionName) {
-        if (sessionName == null) {
-            filteredStudentRecords = null;
-            studentRecordPredicate = PREDICATE_SHOW_ALL_STUDENT_RECORDS;
-            taskmaster.changeSession(null);
-            return;
+        requireNonNull(sessionName);
+
+        if (taskmaster.inSession() && sessionName.equals(taskmaster.currentSessionName())) {
+            filteredStudentRecords.setPredicate(PREDICATE_SHOW_ALL_STUDENT_RECORDS);
         } else {
             /*
              * Note that the implementation of this method requires that the filteredStudentRecords field is updated
@@ -148,7 +148,6 @@ public class ModelManager implements Model {
              * it must be loaded first.
              */
             assert taskmaster.hasSession(sessionName);
-
             studentRecordPredicate = PREDICATE_SHOW_ALL_STUDENT_RECORDS;
 
             // Update filteredStudentRecords before Session is changed.
@@ -156,9 +155,15 @@ public class ModelManager implements Model {
 
             taskmaster.changeSession(sessionName);
         }
+    }
 
-
-
+    /**
+     * Switches TAskmaster to student list view.
+     */
+    @Override
+    public void showStudentList() {
+        filteredStudentRecords = null;
+        taskmaster.showStudentList();
     }
 
     @Override
@@ -224,6 +229,7 @@ public class ModelManager implements Model {
     public void scoreAllStudents(List<StudentRecord> students, double score) {
         List<NusnetId> nusnetIds = students
                 .stream()
+                .filter(s -> s.getAttendanceType() == AttendanceType.PRESENT)
                 .map(StudentRecord::getNusnetId)
                 .collect(Collectors.toList());
 
@@ -265,6 +271,7 @@ public class ModelManager implements Model {
     public void updateFilteredStudentList(Predicate<Student> predicate) {
         requireNonNull(predicate);
         filteredStudents.setPredicate(predicate);
+        taskmaster.showStudentList();
     }
 
     @Override
@@ -272,6 +279,7 @@ public class ModelManager implements Model {
         if (taskmaster.getSessionList().size() == 0) {
             throw new NoSessionException();
         }
+
         if (getCurrentSession().isNull().get()) {
             throw new NoSessionSelectedException();
         }
@@ -299,14 +307,18 @@ public class ModelManager implements Model {
     @Override
     public void updateFilteredStudentRecordList(Predicate<StudentRecord> predicate) {
         requireNonNull(predicate);
+        if (!taskmaster.inSession()) {
+            throw new NoSessionSelectedException();
+        }
+
         studentRecordPredicate = predicate;
         filteredStudentRecords.setPredicate(predicate);
     }
 
     @Override
-    public void showRandomStudent() {
-        StudentRecord randomRecord = taskmaster.getRandomStudentRecord();
-        filteredStudentRecords.setPredicate(new StudentRecordEqualsPredicate(randomRecord));
+    public void showRandomStudent(Random random) {
+        StudentRecord randomRecord = taskmaster.getRandomStudentRecord(random);
+        updateFilteredStudentRecordList(new StudentRecordEqualsPredicate(randomRecord));
     }
 
     @Override
@@ -338,7 +350,10 @@ public class ModelManager implements Model {
         ModelManager other = (ModelManager) obj;
         return taskmaster.equals(other.taskmaster)
                 && userPrefs.equals(other.userPrefs)
-                && filteredStudents.equals(other.filteredStudents);
+                && filteredStudents.equals(other.filteredStudents)
+                && filteredSessions.equals(other.filteredSessions)
+                && ((filteredStudentRecords == null && other.filteredStudentRecords == null)
+                        || filteredStudentRecords.equals(filteredStudentRecords));
     }
 
 }
