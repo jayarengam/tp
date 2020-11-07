@@ -11,7 +11,6 @@ import seedu.taskmaster.commons.core.LogsCenter;
 import seedu.taskmaster.logic.commands.Command;
 import seedu.taskmaster.logic.commands.CommandResult;
 import seedu.taskmaster.logic.commands.NewSessionCommand;
-import seedu.taskmaster.logic.commands.StorageCommand;
 import seedu.taskmaster.logic.commands.exceptions.CommandException;
 import seedu.taskmaster.logic.parser.TaskmasterParser;
 import seedu.taskmaster.logic.parser.exceptions.ParseException;
@@ -52,11 +51,7 @@ public class LogicManager implements Logic {
         CommandResult commandResult;
         Command command = taskmasterParser.parseCommand(commandText);
 
-        if (command instanceof StorageCommand) {
-            StorageCommand storageCommand = (StorageCommand) command;
-            storageCommand.initialiseStorage(storage);
-            commandResult = storageCommand.execute(model);
-        } else if (command instanceof NewSessionCommand) {
+        if (command instanceof NewSessionCommand) {
             NewSessionCommand newSessionCommand = (NewSessionCommand) command;
             StudentRecordList studentRecords = StudentRecordListManager.of(model.getFilteredStudentList());
             newSessionCommand.setStudentRecords(studentRecords);
