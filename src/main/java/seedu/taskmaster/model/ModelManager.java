@@ -25,6 +25,7 @@ import seedu.taskmaster.model.session.exceptions.NoSessionException;
 import seedu.taskmaster.model.session.exceptions.NoSessionSelectedException;
 import seedu.taskmaster.model.student.NusnetId;
 import seedu.taskmaster.model.student.Student;
+import seedu.taskmaster.model.student.exceptions.StudentNotFoundException;
 
 /**
  * Represents the in-memory model of the student list data.
@@ -311,7 +312,14 @@ public class ModelManager implements Model {
 
     @Override
     public void showLowestScoringStudents() {
-        double lowestScore = taskmaster.getLowestScore();
+        double lowestScore;
+        try {
+            lowestScore = taskmaster.getLowestScore();
+        } catch (StudentNotFoundException snfe) {
+            throw new NoPresentInSessionException();
+        }
+
+        studentRecordPredicate = new ScoreEqualsPredicate(lowestScore);
 
         updateFilteredStudentRecordList(new ScoreEqualsPredicate(lowestScore));
     }

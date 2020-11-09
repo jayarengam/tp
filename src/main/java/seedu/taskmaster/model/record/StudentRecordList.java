@@ -5,6 +5,7 @@ import java.util.List;
 
 import javafx.collections.ObservableList;
 import seedu.taskmaster.model.student.NusnetId;
+import seedu.taskmaster.model.student.exceptions.StudentNotFoundException;
 
 /**
  * Represents a list of student records.
@@ -45,8 +46,9 @@ public interface StudentRecordList extends Iterable<StudentRecord> {
 
     /**
      * Returns the lowest score amongst all present students in the student list.
+     * @throws StudentNotFoundException if there are no present students in the student list.
      */
-    double getLowestScore();
+    double getLowestScore() throws StudentNotFoundException;
 
     /**
      * Returns the backing list as an unmodifiable {@code ObservableList}

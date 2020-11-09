@@ -152,12 +152,9 @@ public class StudentRecordListManager implements StudentRecordList {
         internalList.setAll(studentRecords);
     }
 
-    /**
-     * Returns the lowest score amongst all present students in the student list.
-     */
     @Override
-    public double getLowestScore() {
-        double lowestScore = Integer.MAX_VALUE;
+    public double getLowestScore() throws StudentNotFoundException {
+        double lowestScore = Double.MAX_VALUE;
         for (int i = 0; i < internalList.size(); i++) {
             StudentRecord studentRecord = internalList.get(i);
             if (studentRecord.getAttendanceType().equals(AttendanceType.PRESENT)) {
@@ -167,6 +164,10 @@ public class StudentRecordListManager implements StudentRecordList {
                     lowestScore = score;
                 }
             }
+        }
+
+        if (lowestScore == Double.MAX_VALUE) {
+            throw new StudentNotFoundException();
         }
 
         return lowestScore;
