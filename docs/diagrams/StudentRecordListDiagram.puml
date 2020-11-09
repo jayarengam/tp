@@ -1,0 +1,30 @@
+@startuml
+!include style.puml
+skinparam classAttributeIconSize 0
+skinparam classFontSize 20
+skinparam classBackgroundColor MODEL_COLOR
+skinparam classAttributeFontColor white
+skinparam classAttributeFontSize 15
+show members
+
+class StudentRecordListManager {
+    -internalList : ObservableList<StudentRecord>
+    -internalUnmodifiableList : ObservableList<StudentRecord>
+
+    +{static} StudentRecordList of(List<Student>)
+
+    +void markStudentAttendance(NusnetId, AttendanceType)
+    +void markAllStudentAttendances(AttendanceType)
+    +void scoreStudentParticipation(NusnetId, double)
+    +void scoreAllParticipation(List<NusnetId>, double score)
+    +void setStudentRecords(StudentRecordListManager)
+    +void setStudentRecords(List<StudentRecord>)
+    +double getLowestScore()
+    +ObservableList<StudentRecord> asUnmodifiableObservableList()
+    +Iterator<StudentRecord> iterator()
+
+    -{static} StudentRecord createEditedStudentRecord(StudentRecord, EditStudentRecordDescriptor)
+    -boolean studentsAreUnique(List<StudentRecord>)
+}
+
+@enduml

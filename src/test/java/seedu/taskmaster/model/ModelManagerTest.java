@@ -363,10 +363,10 @@ public class ModelManagerTest {
         modelManager.addSession(s);
         modelManager.changeSession(sName);
         List<StudentRecord> studentRecords = modelManager.getFilteredStudentRecordList();
-        modelManager.markAllStudentRecords(studentRecords, AttendanceType.PRESENT);
+        modelManager.markAllStudents(AttendanceType.PRESENT);
         assertEquals("[e0123456|PRESENT|Class Participation Score: 0.00,"
                 + " e0456789|PRESENT|Class Participation Score: 0.00]", s.getStudentRecords().toString());
-        modelManager.scoreAllStudents(studentRecords, 2);
+        modelManager.scoreAllStudents(2);
         assertEquals("[e0123456|PRESENT|Class Participation Score: 2.00,"
                 + " e0456789|PRESENT|Class Participation Score: 2.00]", s.getStudentRecords().toString());
     }
@@ -376,7 +376,7 @@ public class ModelManagerTest {
         ArrayList<StudentRecord> studentRecords = new ArrayList<>();
         studentRecords.add(ALICE_STUDENT_RECORD);
         studentRecords.add(BENSON_STUDENT_RECORD);
-        assertThrows(NoSessionException.class, () -> modelManager.scoreAllStudents(studentRecords, VALID_SCORE_DOUBLE));
+        assertThrows(NoSessionException.class, () -> modelManager.scoreAllStudents(VALID_SCORE_DOUBLE));
     }
 
     @Test
@@ -386,7 +386,7 @@ public class ModelManagerTest {
         List<StudentRecord> studentRecords = modelManager.getFilteredStudentRecordList();
         modelManager.showStudentList();
         assertThrows(NoSessionSelectedException.class, () -> modelManager
-                .scoreAllStudents(studentRecords, VALID_SCORE_DOUBLE));
+                .scoreAllStudents(VALID_SCORE_DOUBLE));
     }
 
     @Test
@@ -396,11 +396,11 @@ public class ModelManagerTest {
         modelManager.addSession(s);
         modelManager.changeSession(sName);
         List<StudentRecord> studentRecords = modelManager.getFilteredStudentRecordList();
-        modelManager.markAllStudentRecords(studentRecords, AttendanceType.PRESENT);
+        modelManager.markAllStudents(AttendanceType.PRESENT);
 
         assertEquals("[e0123456|PRESENT|Class Participation Score: 0.00,"
                 + " e0456789|PRESENT|Class Participation Score: 0.00]", s.getStudentRecords().toString());
-        modelManager.markAllStudentRecords(studentRecords, AttendanceType.ABSENT);
+        modelManager.markAllStudents(AttendanceType.ABSENT);
         assertEquals("[e0123456|ABSENT|Class Participation Score: 0.00,"
                 + " e0456789|ABSENT|Class Participation Score: 0.00]", s.getStudentRecords().toString());
     }
@@ -411,7 +411,7 @@ public class ModelManagerTest {
         studentRecords.add(ALICE_STUDENT_RECORD);
         studentRecords.add(BENSON_STUDENT_RECORD);
         assertThrows(NoSessionException.class, () ->
-                modelManager.markAllStudentRecords(studentRecords, AttendanceType.PRESENT));
+                modelManager.markAllStudents(AttendanceType.PRESENT));
     }
 
     @Test
@@ -423,6 +423,6 @@ public class ModelManagerTest {
         modelManager.addSession(s);
         modelManager.showStudentList();
         assertThrows(NoSessionSelectedException.class, () -> modelManager
-                .markAllStudentRecords(studentRecords, AttendanceType.PRESENT));
+                .markAllStudents(AttendanceType.PRESENT));
     }
 }

@@ -27,12 +27,12 @@ public class MarkAllCommandTest {
         expectedModel.changeSession(new SessionName("Typical session"));
 
         MarkAllCommand markAllCommand = new MarkAllCommand(AttendanceType.PRESENT);
-        expectedModel.markAllStudentRecords(studentRecords, AttendanceType.PRESENT);
+        expectedModel.markAllStudents(AttendanceType.PRESENT);
         String expectedMessage = String.format(MarkAllCommand.MESSAGE_MARK_ALL_SUCCESS, AttendanceType.PRESENT);
         assertCommandSuccess(markAllCommand, model, expectedMessage, expectedModel);
 
         markAllCommand = new MarkAllCommand(AttendanceType.ABSENT);
-        expectedModel.markAllStudentRecords(studentRecords, AttendanceType.ABSENT);
+        expectedModel.markAllStudents(AttendanceType.ABSENT);
         expectedMessage = String.format(MarkAllCommand.MESSAGE_MARK_ALL_SUCCESS, AttendanceType.ABSENT);
         assertCommandSuccess(markAllCommand, model, expectedMessage, expectedModel);
     }

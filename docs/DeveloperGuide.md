@@ -40,7 +40,7 @@ The rest of the App consists of four components.
 * [**`Model`**](#model-component): Holds the data of the App in memory.
 * [**`Storage`**](#storage-component): Reads data from, and writes data to, the hard disk.
 
-Each of the four components,
+Each of the four components
 
 * defines its *API* in an `interface` with the same name as the Component.
 * exposes its functionality using a concrete `{Component Name}Manager` class (which implements the corresponding API `interface` mentioned in the previous point.
@@ -90,7 +90,7 @@ Given below is the Sequence Diagram for interactions within the `Logic` componen
 
 ![Interactions Inside the Logic Component for the `delete 1` Command](images/DeleteSequenceDiagram.png)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of the diagram.
 </div>
 
 ### Model component
@@ -136,7 +136,10 @@ Classes used by multiple components are in the `seedu.taskmaster.commons` packag
 ### SessionList
 
 Author: **Joshua Chew**
-* Implementing the classes that encapsulate a list of tutorial sessions.
+* Implement the class `SessionList` that encapsulates a list of tutorial sessions.
+* Implement the class `Session` that represents a tutorial session conducted by a teaching assistant.
+* Implement the commands in which a session is created and deleted.
+* Implement the command to select the current session.
 
 ![Structure of the SessionList Component](images/SessionListClassDiagram.png)
 
@@ -153,74 +156,120 @@ The `Session`,
 * can mark the attendance of a particular student in the StudentRecordList.
 * can mark the attendance of all students in the StudentRecordList with a single Command.
 
-The current running Session is also stored as an attribute in the Taskmaster.
+The current running Session, `currentSession`, is also stored as an attribute in the Taskmaster.
 
-Given below is the planned Sequence Diagram for interactions within the `Session` component for the `Taskmaster#markStudentWithNusnetId(nusnetId, attendanceType)` API call.
+Given below is the Sequence Diagram for interactions within the `Session` component when `Taskmaster#markStudentWithNusnetId(nusnetId, attendanceType)` is called.
 
 ![Interactions iside the Session class for the `markStudentAttendance'` method call](images/MarkStudentAttendanceSequenceDiagram.png)
 
+**Design Considerations**
+
+The following considerations were taken into account in the process of implementing a `Session`.
+
+* The ability to name a session is meant to contribute to the ease of use of TAskmaster for a Teaching Assistant.
+This gives the Teaching Assistant the freedom to either name sessions as index numbers, or as the topic that was covered during the session.
+With modules typically having up to 24 sessions per semester, this would help the Teaching Assistant navigate and search through a large number of sessions.
+* Sessions are selected by name and deleted by name, to simplify the Teaching Assistant's process of managing multiple sessions. As a result,
+a Teaching Assistant is not allowed to name two sessions with the same name. The class `SessionList` hence supports operations to check if a 
+session with a specified name already exist inside the session list.
+
+**Design Alternatives**
+
+* Make `Session` store an `AttendanceList` and a `ClassParticipationList`.
+
+    Initially, the attendance and class participation data was meant to be stored as separate data structures. However, this
+    approach was abandoned in favour of allowing the `Session` class to store the interface `StudentRecordList` instead. This would
+    support the Open-Closed Principle. It would allow greater ease of future extensions in the functionality of TAskmaster. For
+    example, if we wished to allow a session store data on student submissions, the original approach would necessitate the modification
+    of the code for `Session` to store another data structure which encapsulate the student submission data. On the other hand,
+    storing a `StudentRecordList` can allow `Session` store such additional data without modifying its code at all, as all student-related
+    data is encapsulated in a `StudentRecord`.
+
+**Future Expansion**
+
+Beyond v1.4, additional features can be implemented for **Session**:
+
+* Allow `Session` to contain a `SessionRemark`.
+
+    We have considered that Teaching Assistants might feel the need to write down a short memo about every Session. Such memos
+    may consist of little reminders to collect assignments from students, or to note down what was not covered during the session due
+    to time constraints. Hence, it would be beneficial to give Teaching Assistants the option of adding remarks for every Session.
+
+* Allow users to edit the name, date and time of a `Session`.
+
+    Currently, users are given the option to delete a `Session` if he has made a typo when keying in inputs for 
+    the `SessionName` or `SessionDateTime`. In the future, it would be good to implement an `EditSessionCommand`
+    to allow users to change the name, date and time of a session while still keeping the session's student record data on TAskmaster.
 <br>
 
 ### StudentRecordList
 
 Author: **Goh Siau Chiak**
 
-* Implementing the classes that encapsulate a list of student records.
+* Implemented the classes that encapsulate a list of student records.
 
 ![Structure of StudentRecordList Component](images/StudentRecordDiagram.png)
 
 The `StudentRecordList`,
+
+![Student Record List Class](images/StudentRecordListDiagram.png)
+
 * is stored by a `Session`.
 * encapsulates a list of zero or more `StudentRecord` objects.
 * can provide a list of the `StudentRecord` objects that it contains (to pass to the UI).
 * can mark the attendance of a student in the `Session`.
+* can award class participation score to a student in the `Session`.
 
 The `StudentRecord`,
-* represents an immutable record of a student's attendance in a particular `Session`
+* represents an immutable record of a student enrolled in a particular `Session`.
+  * When the user wants to update the record, a new `StudentRecord` object will be created. 
 * contains
-  * a `NusnetId` that indicates which student the record represents
-  * the `Name` of the student represented
-  * the `AttendanceType` of the student for the `Session`
-  * a `ClassParticipation` representing the score awarded to the student for participating in the `Session`
-
-When the user wants to update the attendance or class participation score, a new `StudentRecord` object will be created. 
+  * an `NusnetId` that indicates which student the record represents.
+  * the `Name` of the student represented.
+  * the `AttendanceType` of the student for the `Session`.
+  * a `ClassParticipation` representing the score awarded to the student for participating in the `Session`.
 
 Given below is the Sequence Diagram for interactions within the `StudentRecordListManager` component when `StudentRecordListManager#markStudentAttendance(nusnetId, attendanceType)` is called.
 
 ![Interactions inside the StudentRecordListManager class for the `markStudentAttendance'` method call](images/StudentRecordListAttendanceSequenceDiagram.png)
 
-Considerations for `markStudentAttendance`:
+**Considerations for `markStudentAttendance`**
     
 On one hand, the mark command uses an index to identify the record, for ease of usage for the user, as compared to 
 having to type out the record's NUSNET ID. On the other hand, the mark attendance method within the `Model` identifies 
 the record to mark using its NUSNET ID, to ensure correctness. Furthermore, the student records have to be stored in a 
-JavaFX `ObservableList` to be easily displayable on the GUI. In the end, I decided to find the record to mark by 
+JavaFX `ObservableList` to be easily displayable on the GUI. 
+
+In the end, I decided to find the record to mark by 
 iterating through the record list and comparing NUSNET IDs, since each student's NUSNET ID must be unique. The `O(N)`
 time complexity of this method does not incur significant time cost because we expect there to be no more than 1000
 students recorded in any session created by TAs using TAskmaster.
 
-Design alternatives:
-- Make `StudentRecord` mutable.
+**Design alternatives**
+
+* Make `StudentRecord` mutable.
 
     This was the original design of `StudentRecord` which made sense at the time because a student's record
-    would be frequently updated for marking of attendnace and awarding of class participation scores. However,
+    would be frequently updated for marking of attendance and awarding of class participation scores. However,
     the JavaFX `ObservableList` interface is **not notified when contained objects are modified**, only when 
     objects were added or deleted. This resulted in a bug where the GUI will not show the changes made when a
     student record was updated. In the end, it was decided that `StudentRecord` should be immutable to fix this bug.
 
-- Make each `StudentRecordList` be dependent on and backed by the `StudentList` maintained by TAskmaster.
+* Make each `StudentRecordList` be dependent on and backed by the `StudentList` maintained by TAskmaster.
 
     This alternative was eventually rejected because it did not make sense from a design perspective. Each
     student record list represents the record of students **for that particular session only**. If we 
     implemented this alternative, edits to the student list will result in changes to all the student record
     lists, which does not follow the design of the student record list. For example:
-    - suppose a TA is currently teaching three students, `A, B, C`
-    - when the TA creates a new session `S1` , it will contain three corresponding student records
-    - subsequently after the session is over, student `A` informs the TA that he is going to drop the module
-    - when the TA deletes student `A` from the student list, the student record list of `S1` will update and
+    * Suppose a TA is currently teaching three students, `A, B, C` who are all present for the first session.
+    * When the TA creates a new session `S1` , it will contain three corresponding student records.
+    * Subsequently after the session is over, student `A` informs the TA that he is going to drop the module
+    * When the TA deletes student `A` from the student list, the student record list of `S1` will update and
     no longer reflect that `A` was enrolled in the module when `S1` occurred
+    * However, this does not change the fact that student `A` was present at session `S1`, and so the records of `S1`
+    should reflect that `A` was present.
 
-- Have `StudentRecord` contain the whole `Student` object, not just its `Name` and `NusnetId`
+* Have `StudentRecord` contain the whole `Student` object, not just its `Name` and `NusnetId`
 
     This was considered and ultimately rejected because of the design considerations in the previous 
     alternative. Each student record, once created, is supposed to be independent of the student in the
@@ -235,6 +284,24 @@ Design alternatives:
     Since editing of `NusnetId` is not allowed, there will be no issues with syncing of data. For example, even if the
     name of a particular student is edited after his `StudentRecord` was saved, we can find that student using their
     `NusnetId`.
+
+**Future Expansions**
+
+Beyond 1.4, there are several features that can be added to improve TAskmaster
+
+* Add a centralised view to see attendance and class participation score over all sessions.
+
+    This would allow the user to, at a glance, observe the attendances and class participation scores of his students. 
+    This could be done by reading through the student record lists of all sessions and displaying the data in a table 
+    form whenever the centralised view is selected by the user. A potential problem is the fact that different sessions 
+    can have different students enrolled, which means that the table will not be complete, i.e. some cells may be empty.
+
+* Add statistics tracking attendance and class participation score to each student
+
+    This would allow the user to, at a glance, analyse how often a student is attending lessons and how much they are
+    participating in each session. This could be done by finding their record in each of the student record lists of
+    all the sessions and displaying the aggregated data in another view for data visualisation, for e.g. with line 
+    graphs and pie charts.
 
 <br>
 
@@ -263,25 +330,82 @@ Alternative implementations:
 * Store the SessionList as a JSON field in the existing Taskmaster file
     * Doing it this way would mean that the file would be repeatedly overwritten and any format errors will invalidate the whole file, including the StudentList.
 
-### ClassParticipation
+### Class Participation Score
 
 Author: **Theodore Leebrant**
-* Implementing the class in charge of representing the class participation of each student in a session.
+* Implement the class in charge of representing the class participation of each student in a session.
+* Implement the commands in which class participation would be scored.
 
-![Class Participation](images/ClassParticipation.png)
+The `ClassParticipation` is made such that it:
+* Stores a `score`
+    * of the `double` type.
+    * between 0 and 10 inclusive.
+    * with detail up to 2 decimal places.
+* Supports equality whenever scores are the same
+* Has a method to return the `String` representation of itself.
+* Will be used by `StudentRecord`.
 
-The `ClassParticipation` is planned to
-* store a `score` and the maximum score (`maxScore`) attainable
-* have mutators for both the score and the maximum score.
-* be used by the StudentRecord
+To support the `ClassParticipation` class, TAskmaster needs to be able to set a student's score in a session.  
+In setting the student's score, TAskmaster needs to comply with the following specifications:
+* Supports checking of the session (i.e. throws an error in case of no sessions made, or no sessions selected)
+* Able to identify the NUSNET ID from the index of student in the session.
+* Has input validation for the score (between 0 and 10 inclusive)
+* Able to truncate score to 2 decimal places (to follow with the `ClassParticipation` class)
+* (Extra goal) Able to score all students who are present.
 
-**To do**
-* make a corresponding command in Taskmaster to set score
-* implement a default scoring system at launch
+Based on the specification above, the following is the activity diagram when someone were to score a student's participation score:
+![Activity Diagram for Class Participation](images/ScoreActivityDiagram.png)
 
-Given below is the planned Sequence Diagram for interaction to set the class participation mark via `Taskmaster#markStudentParticipation(nusnetId, score)`.
+**Design Considerations**
 
-![Activity Diagram for Class Participation](images/ClassPartActivity.png)
+The specifications above have undergone several revisions, with the following considerations taken into account:
+* Session checking needs to be done, as the scoring depends on the session the user is currently on.
+* Support for scoring from the index is for ease of use for the user. 
+Internally, it uses NUSNET ID to see which student needs to be scored as the NUSNET ID is unique for each student.
+Therefore, there needs to be some lookup needed to bridge between these two.
+* Input validation is needed to ensure that the score inputted is valid.
+* The choice of 0-10 `double` score is to support the granularity of score detail 
+(most TA would use at most 1 decimal place, therefore we added support for 2 decimal places for meticulous TAs), while
+still maintaining good display for the sake of UX. Negative scores are not supported as a negative score
+does not make sense in this case.
+* Marking all students will be a feature that supports the user experience of TAs using TAskmaster. Oftentimes there
+is a baseline on what TAs consider basic participation marks - and many students barring the exceptional ones will get
+similar, if not the same score. The `mark all` command comes from our observation of this fact.
+
+**Design Alternatives**
+
+* Make `ClassParticipation` a field in `StudentRecord`.  
+This was the initial plan for `StudentRecord`. However, there are advantages to having ClassParticipation as its own class.
+This would support data abstraction as we abstract away lower-level data items, as well as help with decoupling. 
+The implementer of `StudentRecord` does not need to know the internal details of the implementation of `ClassParticipation`, whether is it an enum (of, let's say
+`GREAT, GOOD, AVERAGE, BAD`) or a `double` score as we have chosen to implement. Having a `ClassParticipation` class would
+also support future expansion in the scoring of class participation without going through the internal details of `StudentRecord`.
+
+* Make `ClassParticipation` an enum or use `int` values for the score.  
+This was initially considered but ultimately scrapped to increase flexibility as well as attention to detail. 
+Having an enum as the scoring system would work, but in effect, it would reduce the detail of the score given to a student.
+This may cause some TAs to not be satisfied with the scoring system. While having integer is a better solution, we
+decided on using `double` due to the fact that 0-10 is easily scalable (e.g. to get the percentage, the TA can just glance
+at the score) and provides more detail. An alternative that may also be considered for future iteration is to use
+`float` instead of `double` as we do not necessarily need double-precision decimal representation with only two decimal
+places.
+
+
+**Future expansion**
+
+Beyond 1.4, there are several improvements that can be done:
+* Set a maximum score for the session.  
+This would include one extra command to change the maximum value of the score. In this case, we need to implement
+a field in `ClassParticipation` for the maximum score, and see from this value for input validation. A problem that we
+foresee in implementing this is the default choice of the maximum score, validation of current score (what happens if
+there is a student with a score of 5.5 but we set the maximum score to 5), as well as possible coupling due to the command
+needing to see the maximum value of the class participation score.
+* Have alternatives for scoring class participation.  
+We have thought about the possibility that the TA does not need the granularity of a `double` value to 2 decimal places.
+In the future, it would be good to support a command that changes the type of the score, e.g. to discrete values given
+by enum. Some considerations would be about existing scores, implementation of classes beyond `ClassParticipation`,
+as well as command handling.
+
 
 <br>
 
@@ -303,8 +427,8 @@ A new method `MainWindow#fillInnerParts2` will change the contents of the Ui to 
 * Implementation still buggy: Ui does not update accordingly for student records.
 
 Alternative implementations considered:
-* Use FXML's tab feature to display class records
-    * Does not support future expansion when sessions is implemented - there may be an indefinite amount of sessions created.
+* Use FXML's tab feature to display class records: Does not support future expansion when sessions is implemented - 
+there may be an indefinite amount of sessions created.
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**
@@ -340,7 +464,10 @@ Alternative implementations considered:
 
 ### User stories
 
-Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
+Priorities: 
+- High (must have) - `* * *`
+- Medium (nice to have) - `* *`
+- Low (unlikely to have) - `*`
 
 | Priority | As a …​                                    | I want to …​                     | So that I can…​                                             |
 | -------- | ------------------------------------------ | --------------------------------- | -------------------------------------------------------------- |
@@ -348,9 +475,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | user                                       | view details of a student         | have quick access to them                                      |
 | `* * *`  | user                                       | view details of all my students   | have quick access to them                                      |
 | `* * *`  | user                                       | mark a student's attendance       |                                                                |
-| `* * *`  | user                                       | mark all students' attendance     | update all attendance records quickly and focus on teaching    |
+| `* *`    | user                                       | mark all students' attendance     | update all attendance records quickly and focus on teaching    |
 | `* * *`  | user                                       | score a student's participation   |                                                                |
-| `* * *`  | user                                       | score all students; participation | update all participation records quickly and focus on teaching |
+| `* *`    | user                                       | score all students; participation | update all participation records quickly and focus on teaching |
 | `* * *`  | user                                       | delete a student                  |                                                                |
 | `* * *`  | user                                       | add a new session                 |                                                                |
 | `* * *`  | user                                       | view details of a session         | have quick access to it                                        |
@@ -564,7 +691,7 @@ Extensions
 ### Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, macOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others (e.g. NUSNET ID)
+* **Private identification detail**: A personal particular that is not meant to be shared with others (e.g. NUSNET ID)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -591,8 +718,6 @@ testers are expected to do more *exploratory* testing.
 
    1. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
-
-1. _{ more test cases …​ }_
 
 ### Adding a student
 
@@ -690,6 +815,83 @@ testers are expected to do more *exploratory* testing.
    1. Other incorrect add commands to try: `goto First Session`, `...`<br>
       Expected: Similar to previous.
 
+### Marking a student's attendance
+
+1. Marking a student's attendance within a session
+
+    1. Prerequisites: 
+        - Add a session to the session list by running the command `add-session s/First Session dt/23-10-2020 0900`.
+
+    1. Test case: `mark 1 a/present`<br>
+       Expected: First student in the student record list of First Session is marked as present.
+
+    1. Test case: `mark a/present`<br>
+       Expected: Current view does not change. Error details shown in the status message.
+
+    1. Test case: `random-student` followed by `mark 1 a/absent`<br>
+       Expected: Random student selected is marked as absent.
+
+    1. Other incorrect add commands to try: `mark`, `mark 1`, `mark x`, `...` (where x is larger than the list size)<br>
+       Expected: Similar to previous.
+
+2. Marking a student's attendance when no session is selected
+
+    1. Prerequisites: List all students using the `list-students` command. Multiple students in the list.
+
+    1. Test case: `mark 1 a/present`<br>
+       Expected: Current view does not change. Status message informs user to select a session first.
+
+### Marking all students attendances
+
+1. Marking all students attendances within a session
+
+    1. Prerequisites: 
+        - Add a session to the session list by running the command `add-session s/First Session dt/23-10-2020 0900`.
+
+    1. Test case: `mark all a/present`<br>
+       Expected: All students in the student record list of First Session are marked as present.
+
+    1. Test case: `mark all`<br>
+       Expected: Current view does not change. Error details shown in the status message.
+
+    1. Test case: `random-student` followed by `mark all a/absent`<br>
+       Expected: All students in the student record list, **not just the random student**, are marked absent.
+
+    1. Test case: `lowest-score` followed by `mark all a/absent`<br>
+       Expected: All students in the student record list, **not just those with the lowest score**, are marked absent.
+
+    1. Other incorrect add commands to try: `mark all a/x` (where x is not a valid attendance type)<br>
+       Expected: Similar to previous.
+
+2. Marking a student's attendance when no session is selected
+
+    1. Prerequisites: List all students using the `list-students` command. Multiple students in the list.
+
+    1. Test case: `mark all a/present`<br>
+       Expected: Current view does not change. Status message informs user to select a session first.
+
+### Scoring a student
+The below testcases assume that you are in a session and have 7 students inside it.
+
+* Scoring a student
+    1. Test case: `score 1 cp/5.3`  
+    Expected: The student with index 1 in the session will be scored 5.3.
+    2. Test case: `score 8 cp/3.23`  
+    Expected: No student's score will be changed. An error shows that the student index provided is invalid.
+    3. Test case: `score 1 cp/-1`  
+    Expected: No student's score will be changed. An error shows that the input is invalid as it is negative.
+    4. Test case: `score 1 cp/11.4`  
+    Expected: No student's score will be changed. An error shows that the input is invalid as it greater than 10.
+
+* Scoring multiple students (all students who are present)
+    1. Test case: `score all cp/8.2`  
+    Expected:  
+        * All students who are present are scored 8.2.
+        * All students who are not present have their scores unchanged.
+    2. Test case: `score all cp/-0.52`  
+    Expected: No scores changed, an error shows that the input is invalid as it is negative.
+    3. Test case: `score all cp/10.52`  
+    Expected: No scores changed, an error shows that the input is invalid as it is greater than 10.
 
 ### Clearing contents of student and session list
 
@@ -729,3 +931,29 @@ testers are expected to do more *exploratory* testing.
    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
 
 1. _{ more test cases …​ }_
+
+--------------------------------------------------------------------------------------------------------------------
+
+## **Appendix: Effort**
+
+The process of morphing AddressBook into TAskmaster was rather challenging, and we have successfully to deal with the following dififculties:
+
+1. Integration Issues
+    
+    As each of us worked on features that were closely linked to each other, our team had to ensure that each of us followed sound
+    software engineering principles, especially the Open-Closed Principle. At every team meeting, we ensured that all of us agreed
+    on a particular design pattern before implementing each of our assigned features, and that our design pattern has sufficient
+    functional and data abstraction.
+    
+    The features had to be done sequentially, which made the integration much more challenging. For example, `StudentRecord` and `StudentRecordList`
+    had to be completed before `Session` and `SessionList` was implemented. Only after the feature for adding sessions have been created, could the
+    features for storing session data be implemented. Finally, as the GUI depended on the backend logic of `StudentRecord` and `Session` to be complete,
+    incremental additions to GUI had to always be completed last in the milestone.
+    
+    As a result, the design choices agreed upon at the start of every milestone had to be absolutely sound, as changing design patterns in the middle 
+    of a milestone could potentially have cascading repercussions down the chain of workflow.
+
+2. Difficulty of writing automated tests
+
+    Some features, especially the GUI, had difficulties implementing unit tests. As a result, testing for the GUI had to be done manually and through the
+    debugger. A lot of effort had to be made on Jin Feng's part to ensure that the testing was comprehensive.

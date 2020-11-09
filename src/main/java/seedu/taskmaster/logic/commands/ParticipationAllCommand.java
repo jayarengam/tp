@@ -3,11 +3,8 @@ package seedu.taskmaster.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.taskmaster.logic.parser.CliSyntax.PREFIX_CLASS_PARTICIPATION;
 
-import java.util.List;
-
 import seedu.taskmaster.logic.commands.exceptions.CommandException;
 import seedu.taskmaster.model.Model;
-import seedu.taskmaster.model.record.StudentRecord;
 import seedu.taskmaster.model.session.exceptions.SessionException;
 
 public class ParticipationAllCommand extends ParticipationCommand {
@@ -23,7 +20,7 @@ public class ParticipationAllCommand extends ParticipationCommand {
             + "Example 1: " + COMMAND_WORD + " 1 " + PREFIX_CLASS_PARTICIPATION + "7\n"
             + "Example 2: " + COMMAND_WORD + " all " + PREFIX_CLASS_PARTICIPATION + "6\n";
 
-    public static final String MESSAGE_MARK_ALL_SUCCESS = "Scored %1$s for all students' participation mark.";
+    public static final String MESSAGE_MARK_ALL_SUCCESS = "Scored %1$s for all present students' participation mark.";
 
     public ParticipationAllCommand(double score) {
         super(null, score);
@@ -33,8 +30,7 @@ public class ParticipationAllCommand extends ParticipationCommand {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         try {
-            List<StudentRecord> lastShownList = model.getFilteredStudentRecordList();
-            model.scoreAllStudents(lastShownList, score);
+            model.scoreAllStudents(score);
         } catch (SessionException sessionException) {
             throw new CommandException(sessionException.getMessage());
         }

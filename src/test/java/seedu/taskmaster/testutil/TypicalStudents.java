@@ -18,12 +18,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import seedu.taskmaster.model.Taskmaster;
+import seedu.taskmaster.model.record.AttendanceType;
 import seedu.taskmaster.model.record.StudentRecord;
 import seedu.taskmaster.model.session.Session;
 import seedu.taskmaster.model.session.SessionDateTime;
 import seedu.taskmaster.model.session.SessionList;
 import seedu.taskmaster.model.session.SessionListManager;
 import seedu.taskmaster.model.session.SessionName;
+import seedu.taskmaster.model.student.NusnetId;
 import seedu.taskmaster.model.student.Student;
 
 /**
@@ -131,8 +133,8 @@ public class TypicalStudents {
                 new SessionName("Typical session 2"),
                 new SessionDateTime(LocalDateTime.of(2020, 1, 1, 12, 0)),
                 getTypicalStudents());
-        modifiedSession.scoreAllParticipation(
-                getTypicalStudents().stream().map(Student::getNusnetId).collect(Collectors.toList()), 5);
+        modifiedSession.markAllStudentAttendances(AttendanceType.PRESENT);
+        modifiedSession.scoreAllParticipation(5);
         modifiedSession.scoreStudentParticipation(ALICE.getNusnetId(), 4);
         modifiedSession.scoreStudentParticipation(CARL.getNusnetId(), 4);
 
@@ -194,10 +196,36 @@ public class TypicalStudents {
     }
 
     /**
+     * Returns a list containing the NUSNET IDs of the typical students.
+     */
+    public static List<NusnetId> getTypicalNusnetIds() {
+        return getTypicalStudents().stream()
+                .map(Student::getNusnetId)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Marks all students in a typical session as present.
+     */
+    public static void markAllAsPresentInTypicalSession(Session typicalSession) {
+        typicalSession.markAllStudentAttendances(AttendanceType.PRESENT);
+    }
+
+    /**
      * Returns a list containing the StudentRecords of all the typical students,
      * without modified ClassParticipation and Attendance fields.
      */
     public static List<StudentRecord> getTypicalStudentRecords() {
         return getTypicalSession().getStudentRecords();
+    }
+
+    /**
+     * Returns a list containing the StudentRecords of all the typical students marked as present,
+     * without modified ClassParticipation and Attendance fields.
+     */
+    public static List<StudentRecord> getTypicalPresentStudentRecords() {
+        Session typicalSession = getTypicalSession();
+        markAllAsPresentInTypicalSession(typicalSession);
+        return typicalSession.getStudentRecords();
     }
 }

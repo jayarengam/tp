@@ -7,6 +7,9 @@ import seedu.taskmaster.logic.commands.exceptions.CommandException;
 import seedu.taskmaster.model.Model;
 import seedu.taskmaster.model.session.exceptions.SessionException;
 
+/**
+ * Lists all student records in the student record list to the user.
+ */
 public class ListRecordsCommand extends Command {
     public static final String COMMAND_WORD = "list-records";
 

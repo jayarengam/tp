@@ -16,17 +16,35 @@ import seedu.taskmaster.testutil.TypicalStudents;
 
 public class StudentRecordListTest {
     private final Student studentInList = TypicalStudents.ALICE;
-    private final Student studentNotInList = TypicalStudents.BENSON;
-    private final StudentRecord studentRecordOfStudentInList = new StudentRecord(
+    private final StudentRecord markedStudentRecordOfStudentInList = new StudentRecord(
             studentInList.getName(),
             studentInList.getNusnetId(),
             AttendanceType.PRESENT,
             new ClassParticipation());
+    private final StudentRecord scoredStudentRecordOfStudentInList = new StudentRecord(
+            studentInList.getName(),
+            studentInList.getNusnetId(),
+            AttendanceType.NO_RECORD,
+            new ClassParticipation(2.2));
+    private final StudentRecord scoredAndMarkedStudentRecordOfStudentInList = new StudentRecord(
+            studentInList.getName(),
+            studentInList.getNusnetId(),
+            AttendanceType.PRESENT,
+            new ClassParticipation(2.2));
+
+    private final Student studentNotInList = TypicalStudents.BENSON;
     private final StudentRecord studentRecordOfStudentNotInList = new StudentRecord(
             studentNotInList.getName(),
             studentNotInList.getNusnetId(),
             AttendanceType.PRESENT,
+            new ClassParticipation(4.3));
+
+    private final StudentRecord studentRecordOfAbsentStudentInList = new StudentRecord(
+            studentInList.getName(),
+            studentInList.getNusnetId(),
+            AttendanceType.ABSENT,
             new ClassParticipation());
+
     private final StudentRecordList studentRecordList =
             StudentRecordListManager.of(Collections.singletonList(studentInList));
 
@@ -34,7 +52,7 @@ public class StudentRecordListTest {
     public void markStudentAttendance_idInList_success() {
         studentRecordList.markStudentAttendance(studentInList.getNusnetId(), AttendanceType.PRESENT);
 
-        List<StudentRecord> expectedStudentRecords = Collections.singletonList(studentRecordOfStudentInList);
+        List<StudentRecord> expectedStudentRecords = Collections.singletonList(markedStudentRecordOfStudentInList);
         StudentRecordList expectedList = new StudentRecordListManager();
         expectedList.setStudentRecords(expectedStudentRecords);
 
@@ -50,10 +68,9 @@ public class StudentRecordListTest {
 
     @Test
     public void markAllStudents_idsInList_success() {
-        studentRecordList.markAllStudentAttendances(
-                Collections.singletonList(studentInList.getNusnetId()), AttendanceType.PRESENT);
+        studentRecordList.markAllStudentAttendances(AttendanceType.PRESENT);
 
-        List<StudentRecord> expectedStudentRecords = Collections.singletonList(studentRecordOfStudentInList);
+        List<StudentRecord> expectedStudentRecords = Collections.singletonList(markedStudentRecordOfStudentInList);
         StudentRecordList expectedList = new StudentRecordListManager();
         expectedList.setStudentRecords(expectedStudentRecords);
 
@@ -61,10 +78,48 @@ public class StudentRecordListTest {
     }
 
     @Test
-    public void markAllStudents_idsNotInList_failure() {
+    public void scoreStudentAttendance_idInList_success() {
+        studentRecordList.scoreStudentParticipation(studentInList.getNusnetId(), 2.2);
+
+        List<StudentRecord> expectedStudentRecords = Collections.singletonList(scoredStudentRecordOfStudentInList);
+        StudentRecordList expectedList = new StudentRecordListManager();
+        expectedList.setStudentRecords(expectedStudentRecords);
+
+        assertEquals(studentRecordList, expectedList);
+    }
+
+    @Test
+    public void scoreStudentAttendance_idNotInList_failure() {
         assertThrows(StudentNotFoundException.class, ()
-            -> studentRecordList.markAllStudentAttendances(
-                    Collections.singletonList(studentNotInList.getNusnetId()), AttendanceType.PRESENT));
+            -> studentRecordList.scoreStudentParticipation(
+                studentNotInList.getNusnetId(), 4.3));
+    }
+
+    @Test
+    public void scoreAllStudents_idsInList_success() {
+        studentRecordList.markStudentAttendance(studentInList.getNusnetId(), AttendanceType.PRESENT);
+        studentRecordList.scoreAllParticipation(2.2);
+
+        List<StudentRecord> expectedStudentRecords = Collections.singletonList(
+                scoredAndMarkedStudentRecordOfStudentInList);
+        StudentRecordList expectedList = new StudentRecordListManager();
+        expectedList.setStudentRecords(expectedStudentRecords);
+
+        assertEquals(studentRecordList, expectedList);
+    }
+
+    @Test
+    public void scoreAllStudents_absentStudentNotScored_success() {
+        StudentRecordList listWithAbsentStudent = StudentRecordListManager.of(
+                Collections.singletonList(studentInList));
+        listWithAbsentStudent.markStudentAttendance(studentInList.getNusnetId(), AttendanceType.ABSENT);
+        listWithAbsentStudent.scoreAllParticipation(5);
+
+        List<StudentRecord> expectedStudentRecords = Collections.singletonList(studentRecordOfAbsentStudentInList);
+        StudentRecordList expectedList = new StudentRecordListManager();
+        expectedList.setStudentRecords(expectedStudentRecords);
+
+        assertEquals(listWithAbsentStudent, expectedList);
     }
 
     @Test
@@ -101,7 +156,7 @@ public class StudentRecordListTest {
     @Test
     public void setStudentRecords_listWithDuplicateStudentRecords_throwsDuplicateStudentException() {
         List<StudentRecord> listWithDuplicateStudentRecords =
-                Arrays.asList(studentRecordOfStudentInList, studentRecordOfStudentInList);
+                Arrays.asList(markedStudentRecordOfStudentInList, markedStudentRecordOfStudentInList);
 
         assertThrows(DuplicateStudentException.class, ()
             -> studentRecordList.setStudentRecords(listWithDuplicateStudentRecords));

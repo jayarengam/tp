@@ -67,5 +67,9 @@ You can reach him at the email `damithch@comp.nus.edu.sg`.
 [[github](http://github.com/theodoreleebrant)]
 [[portfolio](team/theodoreleebrant.md)]
 
-* Role: Developer
-* Responsibilities: Integration
+* Role: Developer, Tester
+* Responsibilities: 
+    * Implementing participation score in the class
+    * Implementing command related to scoring
+    * Overall testing for code and documentation
+    * Repository management: codecov, gradle, etc.

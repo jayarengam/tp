@@ -9,13 +9,11 @@ TAskmaster is a desktop app for managing students, optimised for use via a Comma
 having the benefits of a Graphical User Interface (GUI). If you are a CS Teaching Assistant who can type fast, 
 TAskmaster can help you track your students' attendance and class participation faster than traditional GUI apps.
 
-This application contains a central database of students, and supports operations to add, edit and delete students. 
-Each entry in the database keeps track of a student's name, NUSNET ID, Telegram handle and email address.
+TAskmaster helps a TA to keep track of the students they are currently teaching. It records identification details such 
+as name and NUSNET ID, as well as contact details, like telegram handle and email. 
 
-It also supports commands to add and delete tutorial sessions. Each tutorial session contains an independent list of
-student records. A Teaching Assistant (TA) has the option to mark attendances and assign class participation scores to 
-each student in a session. He or she is also able to mark the attendance or assign a score to all students within a 
-session in one command.
+TAskmaster also helps a TA to track students' attendance for a lesson. A TA can also use TAskmaster to find students
+that are present at the lesson to call on to answer questions, and award class participation score correspondingly.
 
 Given below are my contributions to the project.
 
@@ -45,32 +43,53 @@ particular session.
     This was challenging as it required an in-depth analysis and consideration on how to reconcile the different ways
     that the mark command vs the mark attendance method identifies which record is supposed to be marked. 
 
+- **New Feature:** Added the ability to list all student records in a session.
+    - What it does: Allows a TA to view the records of all students enrolled in that session.
+    - Justification: Since TAskmaster has some functionality to filter the student record list, this feature enables the
+    TA to "reset" the list and view all the records.
+
 - **Code contributed:** [RepoSense link](https://nus-cs2103-ay2021s1.github.io/tp-dashboard/#breakdown=true&search=sc-arecrow)
 
 - **Project Management:**
-  * Managed releases `v1.2` - `v1.3` (2 releases) on GitHub
-  * Authored, tracked and closed issues on Github
-  * Reviewed more than 30 PRs on GitHub
+  * Managed releases `v1.2` - `v1.3` (2 releases) on GitHub.
+  * Authored, tracked and closed issues on Github.
+  * Reviewed more than 30 PRs on GitHub.
 
 - **Enhancements to existing features:**
+    - Fixed many bugs found during PE-D and developer testing of TAskmaster. (PR
+    [#213](https://github.com/AY2021S1-CS2103-F09-1/tp/pull/213),
+    [#217](https://github.com/AY2021S1-CS2103-F09-1/tp/pull/217),
+    [#226](https://github.com/AY2021S1-CS2103-F09-1/tp/pull/226), 
+    [#232](https://github.com/AY2021S1-CS2103-F09-1/tp/pull/232),
+    [#239](https://github.com/AY2021S1-CS2103-F09-1/tp/pull/239),
+    [#240](https://github.com/AY2021S1-CS2103-F09-1/tp/pull/240))
     - Improved the GUI in `v1.4` by fixing some bugs related to resizing of the application window, and changing the look of the
     following components: (PR [#170](https://github.com/AY2021S1-CS2103-F09-1/tp/pull/170))
         - Student List button
         - session buttons
         - student card (inside the list)
         - student record card (inside the list)
-    - Redesigned `Attendance` and related classes in `v1.2` to `StudentRecord` in `v1.3` ([#77](https://github.com/AY2021S1-CS2103-F09-1/tp/pull/77))
-    - Refactor names to update AB3 code to TAskmaster code: (PR [#43](https://github.com/AY2021S1-CS2103-F09-1/tp/pull/43))
+    - Redesigned `Attendance` and related classes in `v1.2` to `StudentRecord` in `v1.3`
+    (PR [#77](https://github.com/AY2021S1-CS2103-F09-1/tp/pull/77))
+    - Refactor names to update AB3 code to TAskmaster code:
+    (PR [#43](https://github.com/AY2021S1-CS2103-F09-1/tp/pull/43))
         - from `AddressBook` to `Taskmaster`
-        - from `Person` to `Taskmaster`
+        - from `Person` to `Student`
 
 - **Documentation:**
     - User Guide:
+        - Added a walkthrough section to give new users something to follow so that they can better understand how to
+        use TAskmaster. (PR [#202](https://github.com/AY2021S1-CS2103-F09-1/tp/pull/202),
+        [#241](https://github.com/AY2021S1-CS2103-F09-1/tp/pull/241))
         - Added documentation for the `mark` and `mark all` features.
-        - Updated User Guide to resolve several documentation flaws pointed out during `PE-D` (PR [#166](https://github.com/AY2021S1-CS2103-F09-1/tp/pull/166))
-    
+        - Updated User Guide to resolve several documentation flaws pointed out during `PE-D` 
+        (PR [#166](https://github.com/AY2021S1-CS2103-F09-1/tp/pull/166),
+        [#213](https://github.com/AY2021S1-CS2103-F09-1/tp/pull/213))
+
     - Developer Guide:
-        - Added implementation details for `StudentRecord` and `StudentRecordList`, including: (PR [#79](https://github.com/AY2021S1-CS2103-F09-1/tp/pull/79) and [#199](https://github.com/AY2021S1-CS2103-F09-1/tp/pull/199))
+        - Added implementation details for `StudentRecord` and `StudentRecordList`, including:
+        (PR [#79](https://github.com/AY2021S1-CS2103-F09-1/tp/pull/79),
+        [#199](https://github.com/AY2021S1-CS2103-F09-1/tp/pull/199))
             - class diagrams
             - sequence diagrams
             - design alternatives 

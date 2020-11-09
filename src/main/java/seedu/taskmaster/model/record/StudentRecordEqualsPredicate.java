@@ -12,7 +12,7 @@ public class StudentRecordEqualsPredicate implements Predicate<StudentRecord> {
 
     @Override
     public boolean test(StudentRecord studentRecord) {
-        return this.desiredStudentRecord.equals(studentRecord);
+        return this.desiredStudentRecord.isSameStudentAs(studentRecord);
     }
 
     @Override

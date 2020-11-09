@@ -14,16 +14,16 @@ import seedu.taskmaster.model.record.StudentRecord;
 import seedu.taskmaster.model.session.exceptions.SessionException;
 
 /**
- * Marks the attendance of a student identified using its displayed index from the student list.
+ * Marks the attendance of a student record identified using its displayed index from the student record list.
  */
 public class MarkCommand extends Command {
     public static final String COMMAND_WORD = "mark";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Marks attendance of the student identified by the "
-            + "index number used in the displayed student list.\n"
+            + ": Marks attendance of the student record identified by the "
+            + "index number used in the displayed student record list.\n"
             + "Parameters: INDEX (must be a positive integer) "
-            + PREFIX_ATTENDANCE_TYPE + "ATTENDANCE_TYPE (must be 'present' or 'absent') \n"
+            + PREFIX_ATTENDANCE_TYPE + "ATTENDANCE_TYPE (must be 'present', 'absent' or 'no_record') \n"
             + "Example: " + COMMAND_WORD + " 1 " + PREFIX_ATTENDANCE_TYPE + "present";
     public static final String MESSAGE_MARK_STUDENT_SUCCESS = "Marked %1$s as %2$s";
 
@@ -31,8 +31,9 @@ public class MarkCommand extends Command {
     private final Index targetIndex;
 
     /**
-     * @param targetIndex of the student in the filtered student list to mark
-     * @param attendanceType to mark the student with
+     * Instantiates a new {@code MarkCommand}.
+     * Each mark command contains a {@code targetIndex} identifying the record in the filtered student record list to
+     * mark and an {@code attendanceType} to mark the record with.
      */
     public MarkCommand(Index targetIndex, AttendanceType attendanceType) {
         this.targetIndex = targetIndex;

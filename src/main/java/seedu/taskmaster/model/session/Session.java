@@ -1,8 +1,6 @@
 package seedu.taskmaster.model.session;
 
 import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 import javafx.collections.ObservableList;
 import seedu.taskmaster.model.record.AttendanceType;
@@ -73,8 +71,8 @@ public class Session {
         studentRecords.markStudentAttendance(nusnetId, attendanceType);
     }
 
-    public void markAllStudentAttendances(List<NusnetId> nusnetIds, AttendanceType attendanceType) {
-        studentRecords.markAllStudentAttendances(nusnetIds, attendanceType);
+    public void markAllStudentAttendances(AttendanceType attendanceType) {
+        studentRecords.markAllStudentAttendances(attendanceType);
     }
 
     /**
@@ -86,8 +84,8 @@ public class Session {
         studentRecords.scoreStudentParticipation(nusnetId, score);
     }
 
-    public void scoreAllParticipation(List<NusnetId> nusnetIds, double score) {
-        studentRecords.scoreAllParticipation(nusnetIds, score);
+    public void scoreAllParticipation(double score) {
+        studentRecords.scoreAllParticipation(score);
     }
 
     /**
@@ -95,16 +93,6 @@ public class Session {
      */
     public double getLowestScore() {
         return studentRecords.getLowestScore();
-    }
-
-    /**
-     * Sets the {@code AttendanceType} of all {@code StudentRecords} to NO_RECORD.
-     */
-    public void clearAttendance() {
-        studentRecords.markAllStudentAttendances(
-                studentRecords.asUnmodifiableObservableList().stream()
-                        .map(StudentRecord::getNusnetId).collect(Collectors.toList()),
-                AttendanceType.NO_RECORD);
     }
 
     /**
@@ -117,14 +105,6 @@ public class Session {
                     studentRecord.getNusnetId(),
                     studentRecord.getAttendanceType());
         }
-    }
-    /**
-     * Returns a random Student Record from the Session.
-     * @param random A Random object
-     * @return A random Student Record
-     */
-    public StudentRecord getRandomStudentRecord(Random random) {
-        return studentRecords.getRandomStudentRecord(random);
     }
 
     @Override

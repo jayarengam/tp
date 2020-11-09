@@ -3,25 +3,29 @@ package seedu.taskmaster.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.taskmaster.logic.parser.CliSyntax.PREFIX_ATTENDANCE_TYPE;
 
-import java.util.List;
-
 import seedu.taskmaster.logic.commands.exceptions.CommandException;
 import seedu.taskmaster.model.Model;
 import seedu.taskmaster.model.record.AttendanceType;
-import seedu.taskmaster.model.record.StudentRecord;
 import seedu.taskmaster.model.session.exceptions.SessionException;
 
+/**
+ * Marks the attendance of all student records in the student record list.
+ */
 public class MarkAllCommand extends MarkCommand {
     public static final String COMMAND_WORD = "mark all";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Marks attendances of all students in the student list.\n"
+            + ": Marks attendances of all records in the student record list.\n"
             + "Parameters: "
-            + PREFIX_ATTENDANCE_TYPE + "ATTENDANCE_TYPE (must be 'present' or 'absent') \n"
+            + PREFIX_ATTENDANCE_TYPE + "ATTENDANCE_TYPE (must be 'present', 'absent' or 'no_record') \n"
             + "Example: " + COMMAND_WORD + PREFIX_ATTENDANCE_TYPE + "present";
 
-    public static final String MESSAGE_MARK_ALL_SUCCESS = "Marked all students as %1$s";
+    public static final String MESSAGE_MARK_ALL_SUCCESS = "Marked all student records as %1$s";
 
+    /**
+     * Instantiates a new {@code MarkAllCommand}.
+     * Each mark all command contains an {@code attendanceType} to mark the records with.
+     */
     public MarkAllCommand(AttendanceType attendanceType) {
         super(null, attendanceType);
     }
@@ -30,8 +34,7 @@ public class MarkAllCommand extends MarkCommand {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         try {
-            List<StudentRecord> lastShownList = model.getFilteredStudentRecordList();
-            model.markAllStudentRecords(lastShownList, attendanceType);
+            model.markAllStudents(attendanceType);
         } catch (SessionException sessionException) {
             throw new CommandException(sessionException.getMessage());
         }

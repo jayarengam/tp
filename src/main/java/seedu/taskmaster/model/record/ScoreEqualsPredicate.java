@@ -15,7 +15,8 @@ public class ScoreEqualsPredicate implements Predicate<StudentRecord> {
 
     @Override
     public boolean test(StudentRecord studentRecord) {
-        return studentRecord.getClassParticipation().getRawScore() == desiredScore;
+        return studentRecord.getAttendanceType().equals(AttendanceType.PRESENT)
+                && studentRecord.getClassParticipation().getRawScore() == desiredScore;
     }
 
     @Override

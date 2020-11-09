@@ -66,21 +66,6 @@ public class SessionTest {
     }
 
     @Test
-    public void clearAttendance() {
-        StudentRecordList markedStudentRecordList = StudentRecordListManager.of(typicalStudents);
-        markedStudentRecordList.markStudentAttendance(firstStudent.getNusnetId(), AttendanceType.PRESENT);
-        markedStudentRecordList.markStudentAttendance(lastStudent.getNusnetId(), AttendanceType.ABSENT);
-
-        Session sessionWithMarkedRecords = new Session(
-                new SessionName("Typical Session"),
-                new SessionDateTime(LocalDateTime.of(2020, 11, 1, 10, 30)),
-                markedStudentRecordList);
-
-        sessionWithMarkedRecords.clearAttendance();
-        assertEquals(sessionWithMarkedRecords, typicalSessionByStudentRecordList);
-    }
-
-    @Test
     public void updateStudentRecords_validRecords_success() {
         StudentRecordList markedStudentRecordList = StudentRecordListManager.of(typicalStudents);
         markedStudentRecordList.markStudentAttendance(firstStudent.getNusnetId(), AttendanceType.PRESENT);

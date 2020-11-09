@@ -31,7 +31,7 @@ class ParticipationAllCommandTest {
         ParticipationAllCommand participationAllCommand = new ParticipationAllCommand(VALID_SCORE_DOUBLE);
         Model expectedModel = new ModelManager(getTypicalTaskmaster(), new UserPrefs());
         expectedModel.changeSession(new SessionName("Typical session"));
-        expectedModel.scoreAllStudents(students, VALID_SCORE_DOUBLE);
+        expectedModel.scoreAllStudents(VALID_SCORE_DOUBLE);
         String expectedMessage = String.format(
                 ParticipationAllCommand.MESSAGE_MARK_ALL_SUCCESS, Double.parseDouble(VALID_SCORE_STRING));
         assertCommandSuccess(participationAllCommand, model, expectedMessage, expectedModel);

@@ -14,7 +14,7 @@ public class RandomStudentCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Gets a random student to call.\n"
             + "Example: " + COMMAND_WORD;
 
-    public static final String MESSAGE_SUCCESS = "Listed student";
+    public static final String MESSAGE_SUCCESS = "Listed random student";
 
     private Random random;
 

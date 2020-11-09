@@ -14,7 +14,7 @@ package Session {
 
 Taskmaster *--down-> "1" SessionList
 SessionList *--right-> "*" Session
-Taskmaster --down-> "1" Session
+Taskmaster --down-> "1 " Session
 Session *--> "1" StudentRecordList
 
 @enduml

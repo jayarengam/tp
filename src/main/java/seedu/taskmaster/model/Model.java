@@ -28,6 +28,10 @@ public interface Model {
     /** {@code Predicate} that always evaluates to true */
     Predicate<StudentRecord> PREDICATE_SHOW_ALL_STUDENT_RECORDS = unused -> true;
 
+    /** {@code Predicate} that shows present students */
+    Predicate<StudentRecord> PREDICATE_SHOW_ALL_PRESENT_STUDENT_RECORDS = studentRecord ->
+            studentRecord.getAttendanceType().equals(AttendanceType.PRESENT);
+
     /**
      * Replaces user prefs data with the data in {@code userPrefs}.
      */
@@ -172,9 +176,9 @@ public interface Model {
     void markStudentWithNusnetId(NusnetId nusnetId, AttendanceType attendanceType);
 
     /**
-     * Marks the attendances of all {@code studentRecords} with the given {@code attendanceType}
+     * Marks the attendances of all {@code StudentRecords} with the given {@code attendanceType}.
      */
-    void markAllStudentRecords(List<StudentRecord> studentRecords, AttendanceType attendanceType);
+    void markAllStudents(AttendanceType attendanceType);
 
     /**
      * Marks the attendance of the given student {@code target} with the given {@code attendanceType}.
@@ -185,14 +189,10 @@ public interface Model {
     void scoreStudentWithNusnetId(NusnetId nusnetId, double score);
 
     /**
-     * Marks the attendances of all {@code students} with the given {@code attendanceType}
+     * Updates the {@code ClassParticipation} of all {@code StudentRecords} which are {@code PRESENT} with the
+     * given score.
      */
-    void scoreAllStudents(List<StudentRecord> students, double score);
-
-    /**
-     * Updates the corresponding attendance statuses with the Attendances in the given list.
-     */
-    void updateStudentRecords(List<StudentRecord> studentRecords);
+    void scoreAllStudents(double score);
 
     /**
      * Updates the filter of the filtered student list to show a random student.
@@ -200,9 +200,7 @@ public interface Model {
     void showRandomStudent(Random random);
 
     /**
-     * Clears the attendance statuses of all students in the student list.
+     * Returns the currently displayed session.
      */
-    void clearAttendance();
-
     SimpleObjectProperty<Session> getCurrentSession();
 }
